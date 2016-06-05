@@ -1,0 +1,18 @@
+@font-face{font-family: RAVIE;src: url(img/Bonus/kenvector_future.ttf);}
+body{
+	background-image: url('img/Backgrounds/darkPurple.png'); 
+}
+canvas{
+	display: block;
+	margin: auto;
+	border: 1px solid #000;
+	background-image: url('img/Backgrounds/purple.png');
+	background-position: 0px 0px;
+	background-repeat: repeat;
+	animation: animBackground 1.5s linear infinite;
+	cursor: url("img/PNG/UI/cursor.png"), pointer;
+}
+@keyframes animBackground{
+	from{ background-position: 0 0;}
+	to{ background-position: 0 100% ;}
+}
