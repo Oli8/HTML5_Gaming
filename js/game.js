@@ -18,7 +18,7 @@ function init(){
         {type: img.rocks.small, number: 6, boss: img.rocks.big},
         {type: img.enemies[1], number: 5, boss: img.bosses[1]}
     ];
-    //to do 
+    //to do     
     //help screen and start
     //enemies speed with no variable ??
     //php for cross domain shit
@@ -92,6 +92,7 @@ function init(){
             .call(function(){
                 canShoot = true;
                 moveEnemies();
+                enemiesShoot();
             })
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
@@ -255,9 +256,10 @@ function init(){
     }
 
     function enemiesShoot(){
+        console.log('ennemies shooting !!!');
         for(var i=0; i<ennemiesArray.length; i++){
             if( Math.random() > 0){
-                var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemies);
+                var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemie);
                 enemieShoot.x = ennemiesArray[i].x;
                 enemieShoot.y = ennemiesArray[i].y;
                 enemiesShootArr.push(enemieShoot);
@@ -268,6 +270,7 @@ function init(){
                 createjs.Ticker.addEventListener("tick", stage);
             }
         }
+        window.setInterval(enemiesShoot, enemiesSpeed);
     }
 
     function doBonus(type){
