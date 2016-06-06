@@ -4,7 +4,7 @@ function init(){
     var img = {
         ship: 'PNG/playerShip2_red.png',    
         fire: {1: 'PNG/Lasers/laserBlue07.png', 2: 'PNG/Lasers/laserBlue06.png', 3: 'PNG/Lasers/laserBlue16.png',
-               ennemie: 'PNG/Lasers/laserRed07.png'},
+               enemie: 'PNG/Lasers/laserRed07.png'},
         rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', 
                 big: 'PNG/Meteors/meteorBrown_big3.png'},
         enemies: {1: 'PNG/Enemies/enemyBlue2.png'},
@@ -33,6 +33,7 @@ function init(){
     var bonusArr = [];
     //var shoot;
     var shootArray = [];
+    var enemiesShootArr = [];
     var ennemiesArray = [];
     var livesArray = [];
     //var ennemies;
@@ -71,9 +72,6 @@ function init(){
             createjs.Ticker.on("tick", tick);
         }
     }
-
-    //Move ennemies
-    window.setInterval(moveEnemies, enemiesSpeed);
        
     function addShip(){
         ship = new createjs.Bitmap('img/' + img.ship);
@@ -84,7 +82,6 @@ function init(){
     }
 
     function addEnnemies(){
-        //canShoot = false;
         for(var i=0; i<levels[level].number; i++){
             var ennemie = new createjs.Bitmap('img/' + levels[level].type);
             ennemie.x = 75 + (i * 150);
@@ -96,6 +93,7 @@ function init(){
             .to({y: 150}, 1000, createjs.Ease.getPowInOut(1))
             .call(function(){
                 canShoot = true;
+                moveEnemies();
             })
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
@@ -254,6 +252,23 @@ function init(){
             .to({y: randY, x:randX}, enemiesSpeed, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
+        }
+        window.setInterval(moveEnemies, enemiesSpeed);
+    }
+
+    function enemiesShoot(){
+        for(var i=0; i<ennemiesArray.length; i++){
+            if( Math.random() > 0){
+                var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemies);
+                enemieShoot.x = ennemiesArray[i].x;
+                enemieShoot.y = ennemiesArray[i].y;
+                enemiesShootArr.push(enemieShoot);
+                stage.addChild(enemieShoot);
+                createjs.Tween.get(enemieShoot)
+                .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 2000, createjs.Ease.getPowInOut(1))
+                createjs.Ticker.setFPS(60);
+                createjs.Ticker.addEventListener("tick", stage);
+            }
         }
     }
 
