@@ -86,7 +86,7 @@ function init(){
     }
 
     function addEnnemies(){
-        for(var i=0; i<levels[level].number; i++){
+        for(var i=0, c=0; i<levels[level].number; i++){
             var ennemie = new createjs.Bitmap('img/' + levels[level].type);
             ennemie.x = 75 + (i * 150);
             ennemie.y = -100;
@@ -96,9 +96,13 @@ function init(){
             createjs.Tween.get(ennemie)
             .to({y: 150}, 1000, createjs.Ease.getPowInOut(1))
             .call(function(){
-                canShoot = true;
-                moveEnemies();
-                enemiesShoot();
+                c++;
+                console.log(+i +' dot call '+c);
+                if( c == levels[level].number){
+                    canShoot = true;
+                    moveEnemies();
+                    //enemiesShoot();
+                }
             })
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
@@ -163,7 +167,7 @@ function init(){
                             createjs.Tween.get(bonus)
                             .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 2000, createjs.Ease.getPowInOut(1))
                             createjs.Ticker.setFPS(60);
-                            createjs.Ticker.addEventListener("tick", stage);
+                            // createjs.Ticker.addEventListener("tick", stage);
                         }
                         stage.removeChild(ennemiesArray[i]);
                         ennemiesArray.splice(i, 1);
@@ -171,8 +175,6 @@ function init(){
                         scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                     }
                     else{
-                        //ennemiesArray[i].alpha = 0.5;
-                        //console.log(ennemiesArray[i].life / (level + 1));
                         ennemiesArray[i].alpha = ennemiesArray[i].life / (level + 1); 
                     }
                     stage.removeChild(shootArray[j]);
@@ -237,7 +239,7 @@ function init(){
                         canShoot = false;
                         level++;
                         hitBoss = 0;
-                        enemiesSpeed -= 1000;
+                        enemiesSpeed -= 1000; //fucks everything up somehow??
                         if(level < levels.length)
                             addEnnemies();
                         else
@@ -250,15 +252,20 @@ function init(){
 
     function moveEnemies(){
         console.log('move it');
-        for(var i=0; i<ennemiesArray.length; i++){
+        for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
             var randX = Math.floor(Math.random() * 960) + 1;
             var randY = Math.floor(Math.random() * 750) + 1;
             createjs.Tween.get(ennemiesArray[i])
             .to({y: randY, x:randX}, enemiesSpeed, createjs.Ease.getPowInOut(1))
+            .call(function(){
+                c++;
+                console.log(i+' remove it '+c);
+                if(c == d) moveEnemies();
+            })
             createjs.Ticker.setFPS(60);
-            createjs.Ticker.addEventListener("tick", stage);
+            // createjs.Ticker.addEventListener("tick", stage);
         }
-        window.setInterval(moveEnemies, enemiesSpeed);
+        //window.setInterval(function(){if(!bossPhase)moveEnemies();}, enemiesSpeed);
     }
 
     function enemiesShoot(){
@@ -326,28 +333,28 @@ function init(){
             createjs.Tween.get(ship)
             .to({y: ship.y - 40}, 100, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
-            createjs.Ticker.addEventListener("tick", stage);
+            // createjs.Ticker.addEventListener("tick", stage);
             console.log('up');
         }
         else if(key == 39 && ship.x < stage.canvas.width - ship.image.width - 25){
             createjs.Tween.get(ship)
             .to({x: ship.x + 40}, 100, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
-            createjs.Ticker.addEventListener("tick", stage);
+            // createjs.Ticker.addEventListener("tick", stage);
             console.log('right');
         }
         else if(key == 40 && ship.y < stage.canvas.height - ship.image.height - 30){
             createjs.Tween.get(ship)
             .to({y: ship.y + 40}, 100, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
-            createjs.Ticker.addEventListener("tick", stage);
+            // createjs.Ticker.addEventListener("tick", stage);
             console.log('down ' + ship.y);
         }
         else if(key == 37 && ship.x > 0){
             createjs.Tween.get(ship)
             .to({x: ship.x - 40}, 100, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
-            createjs.Ticker.addEventListener("tick", stage);
+            // createjs.Ticker.addEventListener("tick", stage);
             console.log('left');
         }
         else if(key == 32 && canShoot){
@@ -360,7 +367,7 @@ function init(){
             createjs.Tween.get(shoot)
             .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
-            createjs.Ticker.addEventListener("tick", stage);
+            // createjs.Ticker.addEventListener("tick", stage);
             console.log('fire');
         }
         else if(key == 27){
