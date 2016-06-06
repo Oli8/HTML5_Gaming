@@ -18,11 +18,17 @@ function init(){
         {type: img.rocks.small, number: 6, boss: img.rocks.big},
         {type: img.enemies[1], number: 5, boss: img.bosses[1]}
     ];
+    var helpText = "The game consists of five phase, at the end of each\
+    you will have to face the boss, you can not let it touch you or the game will end.\
+    Use the arrow key to move and the spacebar to shoot. Have fun ! :)";
     //to do     
+    //add sound
     //help screen and start
     //enemies speed with no variable ??
-    //php for cross domain shit
     //ony one create ticker stuff
+    //boss movement
+    //invert enemy shoot img
+    //review enemies shoot
     var hit = 0;
     var hitBoss = 0;
     var canShoot = false;
@@ -260,6 +266,7 @@ function init(){
         for(var i=0; i<ennemiesArray.length; i++){
             if( Math.random() > 0){
                 var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemie);
+                enemieShoot.rotation = 180;
                 enemieShoot.x = ennemiesArray[i].x;
                 enemieShoot.y = ennemiesArray[i].y;
                 enemiesShootArr.push(enemieShoot);
