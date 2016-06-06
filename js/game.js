@@ -19,12 +19,10 @@ function init(){
         {type: img.enemies[1], number: 5, boss: img.bosses[1]}
     ];
     //to do 
-    //escape game
     //help screen and start
-    //adjust bonus speed fall
-    //allow shoot only when enemy ready
-    //enemies
     //enemies speed with no variable ??
+    //php for cross domain shit
+    //ony one create ticker stuff
     var hit = 0;
     var hitBoss = 0;
     var canShoot = false;
@@ -354,6 +352,9 @@ function init(){
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
             console.log('fire');
+        }
+        else if(key == 27){
+            location.reload();
         }
     });
 
