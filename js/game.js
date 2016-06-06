@@ -23,6 +23,8 @@ function init(){
     //help screen and start
     //adjust bonus speed fall
     //allow shoot only when enemy ready
+    //enemies
+    //enemies speed with no variable ??
     var hit = 0;
     var hitBoss = 0;
     var bossArr = [];
@@ -140,7 +142,7 @@ function init(){
                     console.log('hit!!! ' + ennemiesArray[i].life);
                     ennemiesArray[i].life -= fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0.8){
+                        if(Math.random() > 0){
                             console.log('bonus !!!');
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
@@ -151,7 +153,7 @@ function init(){
                             bonusArr.push(bonus);
                             stage.addChild(bonus);
                             createjs.Tween.get(bonus)
-                            .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 500, createjs.Ease.getPowInOut(1))
+                            .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 2000, createjs.Ease.getPowInOut(1))
                             createjs.Ticker.setFPS(60);
                             createjs.Ticker.addEventListener("tick", stage);
                         }
