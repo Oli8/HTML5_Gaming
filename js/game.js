@@ -27,6 +27,7 @@ function init(){
     //enemies speed with no variable ??
     var hit = 0;
     var hitBoss = 0;
+    var canShoot = false;
     var bossArr = [];
     var bossPhase = false;
     var bonusArr = [];
@@ -35,7 +36,7 @@ function init(){
     var ennemiesArray = [];
     var livesArray = [];
     //var ennemies;
-    //func addEnnemies
+    var enemiesSpeed = 5000;    
     var score = 0;
     var scoreWrap;
     var loaded = 0;
@@ -72,7 +73,7 @@ function init(){
     }
 
     //Move ennemies
-    window.setInterval(moveEnemies, 5000 - (level * 1250));
+    window.setInterval(moveEnemies, enemiesSpeed);
        
     function addShip(){
         ship = new createjs.Bitmap('img/' + img.ship);
@@ -83,6 +84,7 @@ function init(){
     }
 
     function addEnnemies(){
+        //canShoot = false;
         for(var i=0; i<levels[level].number; i++){
             var ennemie = new createjs.Bitmap('img/' + levels[level].type);
             ennemie.x = 75 + (i * 150);
@@ -92,6 +94,9 @@ function init(){
             stage.addChild(ennemie);
             createjs.Tween.get(ennemie)
             .to({y: 150}, 1000, createjs.Ease.getPowInOut(1))
+            .call(function(){
+                canShoot = true;
+            })
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
         }
@@ -142,7 +147,7 @@ function init(){
                     console.log('hit!!! ' + ennemiesArray[i].life);
                     ennemiesArray[i].life -= fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0){
+                        if(Math.random() > 0.8){
                             console.log('bonus !!!');
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
@@ -226,9 +231,11 @@ function init(){
                         stage.update();
                         console.log('boss is dead');
                         bossPhase = false;
+                        canShoot = false;
                         level++;
                         hitBoss = 0;
-                        if(level < 2)
+                        enemiesSpeed -= 1000;
+                        if(level < levels.length)
                             addEnnemies();
                         else
                             gameOver(1);
@@ -244,7 +251,7 @@ function init(){
             var randX = Math.floor(Math.random() * 960) + 1;
             var randY = Math.floor(Math.random() * 750) + 1;
             createjs.Tween.get(ennemiesArray[i])
-            .to({y: randY, x:randX}, 5000 - (level * 1250), createjs.Ease.getPowInOut(1))
+            .to({y: randY, x:randX}, enemiesSpeed, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
         }
@@ -320,20 +327,17 @@ function init(){
             createjs.Ticker.addEventListener("tick", stage);
             console.log('left');
         }
-        else if(key == 32){
+        else if(key == 32 && canShoot){
             var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
             shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
             shoot.y = ship.y - (ship.image.height / 2);
             shootArray.push(shoot);
             stage.addChild(shoot);
-            //adjust speed depending on ship position/
-            //science bitch
             var speed = (ship.y + 1000) * (4/3); 
             createjs.Tween.get(shoot)
             .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
-            //createjs.Ticker.on("tick", tick);
             console.log('fire');
         }
     });
