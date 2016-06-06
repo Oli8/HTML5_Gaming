@@ -67,6 +67,9 @@ function init(){
                 createjs.Ticker.on("tick", tick);
             }
         }
+
+        //Move ennemies
+        window.setInterval(moveEnemies, 2000);
        
         function addShip(){
             ship = new createjs.Bitmap('img/' + img.ship);
@@ -184,6 +187,7 @@ function init(){
                     }
                 }
             }
+            //check if all enemies died and if so launch boss
             if(ennemiesArray.length == 0 && !bossPhase){
                 bossPhase = true;
                 console.log('stage 1 completed');
@@ -228,6 +232,18 @@ function init(){
                         }
                     }
                 }
+            }
+        }
+
+        function moveEnemies(){
+            console.log('move it');
+            for(var i=0; i<ennemiesArray.length; i++){
+                var randX = Math.floor(Math.random() * 960) + 1;
+                var randY = Math.floor(Math.random() * 750) + 1;
+                createjs.Tween.get(ennemiesArray[i])
+                .to({y: randY, x:randX}, 2000, createjs.Ease.getPowInOut(1))
+                createjs.Ticker.setFPS(60);
+                createjs.Ticker.addEventListener("tick", stage);
             }
         }
 
