@@ -21,7 +21,7 @@ function init(){
         //to do 
         //escape game
         //help screen and start
-        //bonus fall
+        //lower alpha when ennemy hit ?
         var hit = 0;
         var hitBoss = 0;
         var bossArr = [];
@@ -155,6 +155,11 @@ function init(){
                             ennemiesArray.splice(i, 1);
                             score += 50 * (level + 1); 
                             scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
+                        }
+                        else{
+                            //ennemiesArray[i].alpha = 0.5;
+                            //console.log(ennemiesArray[i].life / (level + 1));
+                            ennemiesArray[i].alpha = ennemiesArray[i].life / (level + 1); 
                         }
                         stage.removeChild(shootArray[j]);
                         shootArray.splice(j, 1);
