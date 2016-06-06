@@ -133,33 +133,33 @@ function init(){
                 for (var j=0; j<shootArray.length; j++) {
                     var collision = ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0);
                     if(collision){
-                        if(Math.random() > 0.8){
-                            console.log('bonus !!!');
-                            var bonusTypeArr = ['life', 'shoot', 'points'];
-                            var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
-                            var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
-                            bonus.x = ennemiesArray[i].x;
-                            bonus.y = ennemiesArray[i].y;
-                            bonus.type = bonusType;
-                            bonusArr.push(bonus);
-                            stage.addChild(bonus);
-                            createjs.Tween.get(bonus)
-                            .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 500, createjs.Ease.getPowInOut(1))
-                            createjs.Ticker.setFPS(60);
-                            createjs.Ticker.addEventListener("tick", stage);
-                        }
                         console.log('hit!!! ' + ennemiesArray[i].life);
                         ennemiesArray[i].life -= fireLevel;
                         if(ennemiesArray[i].life <= 0){
+                            if(Math.random() > 0.8){
+                                console.log('bonus !!!');
+                                var bonusTypeArr = ['life', 'shoot', 'points'];
+                                var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
+                                var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
+                                bonus.x = ennemiesArray[i].x;
+                                bonus.y = ennemiesArray[i].y;
+                                bonus.type = bonusType;
+                                bonusArr.push(bonus);
+                                stage.addChild(bonus);
+                                createjs.Tween.get(bonus)
+                                .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 500, createjs.Ease.getPowInOut(1))
+                                createjs.Ticker.setFPS(60);
+                                createjs.Ticker.addEventListener("tick", stage);
+                            }
                             stage.removeChild(ennemiesArray[i]);
                             ennemiesArray.splice(i, 1);
+                            score += 50 * (level + 1); 
+                            scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                         }
                         stage.removeChild(shootArray[j]);
                         shootArray.splice(j, 1);
                         stage.update();
                         hit++;
-                        score += 50 * (level + 1);
-                        scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                     }
                 }
             }
