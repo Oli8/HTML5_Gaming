@@ -9,7 +9,8 @@ canvas{
 	background-image: url('img/Backgrounds/purple.png');
 	background-position: 0px 0px;
 	background-repeat: repeat;
-	animation: animBackground 1.5s linear infinite;
+	animation: animBackground 1.5s linear;
+	animation-iteration-count: infinite;
 	cursor: url("img/PNG/UI/cursor.png"), pointer;
 }
 @keyframes animBackground{

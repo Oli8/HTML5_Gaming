@@ -25,10 +25,10 @@ function init(){
     //add sound
     //help screen and start
     //enemies speed with no variable ??
-    //ony one create ticker stuff
     //boss movement
-    //invert enemy shoot img
     //review enemies shoot
+    //pause
+    var paused = false;
     var hit = 0;
     var hitBoss = 0;
     var canShoot = false;
@@ -371,7 +371,17 @@ function init(){
             console.log('fire');
         }
         else if(key == 27){
-            location.reload();
+            //createjs.Ticker.setPaused(true);
+            //Pause and set a restart button ?
+            if(!paused){
+                $('#canvas').css('animation-iteration-count', '0');
+                createjs.Ticker.setPaused(paused = true);
+            }
+            else{
+                $('#canvas').css('animation-iteration-count', 'infinite');
+                createjs.Ticker.setPaused(paused = false);
+            }
+            //location.reload();
         }
     });
 
