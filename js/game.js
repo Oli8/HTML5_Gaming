@@ -35,6 +35,7 @@ function init(){
     var bonusArr = [];
     var pauseWrap = new createjs.Container();
     var startWrap = new createjs.Container();
+    var end = false;
     //var shoot;
     var shootArray = [];
     var enemiesShootArr = [];
@@ -94,7 +95,9 @@ function init(){
         var startText = new createjs.Text('START', '40px RAVIE', 'white');
         startText.x = 380;
         startText.y = 400;
-        $('#canvas').click(start);
+        $('#canvas').click(function(){
+            if(!end) start();
+        });
         startWrap.addChild(helpText, startText);
         stage.addChild(startWrap);
         stage.update();
@@ -332,6 +335,7 @@ function init(){
     }
 
     function gameOver(win){
+        end = true;
         var text, scoreBox, msg, replay;
         msg = win ? 'Congratulations !' : 'Game over';
             
@@ -346,7 +350,9 @@ function init(){
         replay.x = 370;
         replay.y = 480;
         stage.addChild(text, replay, scoreBox);
-        $('#canvas').click(function(){location.reload();});
+        $('#canvas').click(function(){
+            if(end)location.reload();
+        });
     }
 
     $(document).keydown(function(e){
