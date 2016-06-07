@@ -1,4 +1,7 @@
-@font-face{font-family: RAVIE;src: url(img/Bonus/kenvector_future.ttf);}
+@font-face{
+	font-family: RAVIE;
+	src: url(img/Bonus/kenvector_future.ttf);
+}
 body{
 	background-image: url('img/Backgrounds/darkPurple.png'); 
 }
@@ -14,6 +17,6 @@ canvas{
 	cursor: url("img/PNG/UI/cursor.png"), pointer;
 }
 @keyframes animBackground{
-	from{ background-position: 0 0;}
-	to{ background-position: 0 100% ;}
+	from{background-position: 0 0;}
+	to{background-position: 0 100% ;}
 }
