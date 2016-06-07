@@ -35,6 +35,7 @@ function init(){
     var bossArr = [];
     var bossPhase = false;
     var bonusArr = [];
+    var pauseWrap = new createjs.Container();
     //var shoot;
     var shootArray = [];
     var enemiesShootArr = [];
@@ -322,9 +323,7 @@ function init(){
         replay.x = 370;
         replay.y = 480;
         stage.addChild(text, replay, scoreBox);
-        $('#canvas').click(function(){
-            location.reload();
-        });
+        $('#canvas').click(function(){location.reload();});
     }
 
     $(document).keydown(function(e){
@@ -357,7 +356,7 @@ function init(){
             // createjs.Ticker.addEventListener("tick", stage);
             console.log('left');
         }
-        else if(key == 32 && canShoot){
+        else if(key == 32 && canShoot && !paused){
             var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
             shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
             shoot.y = ship.y - (ship.image.height / 2);
@@ -371,17 +370,26 @@ function init(){
             console.log('fire');
         }
         else if(key == 27){
-            //createjs.Ticker.setPaused(true);
-            //Pause and set a restart button ?
             if(!paused){
                 $('#canvas').css('animation-iteration-count', '0');
                 createjs.Ticker.setPaused(paused = true);
+                var pauseText = new createjs.Text('PAUSE', '75px RAVIE', 'white');
+                pauseText.x = 340;
+                pauseText.y = 300;
+                var restart = new createjs.Text('RESTART', '40px RAVIE', 'white');
+                restart.x = 380;
+                restart.y = 400;
+                $('#canvas').click(function(){location.reload();});;
+                pauseWrap.addChild(pauseText, restart);
+                stage.addChild(pauseWrap);
+                stage.alpha = 0.5;
             }
             else{
                 $('#canvas').css('animation-iteration-count', 'infinite');
                 createjs.Ticker.setPaused(paused = false);
+                stage.removeChild(pauseWrap);
+                stage.alpha = 1;
             }
-            //location.reload();
         }
     });
 
