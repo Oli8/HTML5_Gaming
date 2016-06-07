@@ -94,7 +94,7 @@ function init(){
         var startText = new createjs.Text('START', '40px RAVIE', 'white');
         startText.x = 380;
         startText.y = 400;
-        $('#canvas').click(function(){start();});;
+        $('#canvas').click(start);
         startWrap.addChild(helpText, startText);
         stage.addChild(startWrap);
         stage.update();
