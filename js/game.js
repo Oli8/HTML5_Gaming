@@ -13,14 +13,13 @@ function init(){
         life: 'PNG/UI/playerLife2_red.png'
     };
     var level = 0;
-    //describe game level
+    //describe game levels
     var levels = [
         {type: img.rocks.small, number: 6, boss: img.rocks.big},
         {type: img.enemies[1], number: 5, boss: img.bosses[1]}
     ];
-    var helpText = "The game consists of five phase, at the end of each\
-    you will have to face the boss, you can not let it touch you or the game will end.\
-    Use the arrow key to move and the spacebar to shoot. Have fun ! :)";
+    var helpText = "The game consists of five phase, at the end of each you will have to face the boss, you can not let it touch you or the game will end.\
+    Use the arrow key to move, the spacebar to shoot and escape to pause. Have fun ! :)";
     //to do     
     //add sound
     //help screen and start
@@ -36,6 +35,7 @@ function init(){
     var bossPhase = false;
     var bonusArr = [];
     var pauseWrap = new createjs.Container();
+    var startWrap = new createjs.Container();
     //var shoot;
     var shootArray = [];
     var enemiesShootArr = [];
@@ -70,12 +70,36 @@ function init(){
     function loadImage(e){
         loaded++;
         if(loaded == toLoad){
-            addShip();
-            addEnnemies();
-            addLives();
-            addScore();
-            createjs.Ticker.on("tick", tick);
+            startScreen();
+            // addShip();
+            //addEnnemies();
+            // addLives();
+            // addScore();
+            //createjs.Ticker.on("tick", tick);
         }
+    }
+
+    function start(){
+        stage.removeChild(startWrap);
+        addShip();
+        addEnnemies();
+        addLives();
+        addScore();
+        createjs.Ticker.on("tick", tick);
+    }
+
+    function startScreen(){
+        helpText = new createjs.Text(helpText, '20px RAVIE', 'white');
+        helpText.x = 40;
+        helpText.y = 200;
+        var startText = new createjs.Text('RESTART', '40px RAVIE', 'white');
+        startText.x = 380;
+        startText.y = 400;
+        $('#canvas').click(function(){start();});;
+        startWrap.addChild(helpText, startText);
+        stage.addChild(startWrap);
+        stage.update();
+        createjs.Ticker.addEventListener("tick", stage);
     }
        
     function addShip(){
