@@ -15,8 +15,8 @@ function init(){
     //describe game levels
     var levels = [
         //{type: img.rocks.small, number: 6, shootY: 50, boss: img.rocks.big},
-        {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0]},
-        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1]}
+        {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
+        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200}
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     //to do
@@ -118,7 +118,7 @@ function init(){
     function addEnnemies(){
         for(var i=0, c=0; i<levels[level].number; i++){
             var ennemie = new createjs.Bitmap('img/' + levels[level].type);
-            ennemie.x = 75 + (i * 150);
+            ennemie.x = levels[level].pos + (i * levels[level].pos);
             ennemie.y = -100;
             ennemie.life = level+1;
             ennemiesArray.push(ennemie);
@@ -323,7 +323,7 @@ function init(){
                 enemiesShootArr.push(enemieShoot);
                 stage.addChild(enemieShoot);
                 createjs.Tween.get(enemieShoot)
-                .to({y: 800}, 3000, createjs.Ease.getPowInOut(1))
+                .to({y: 800}, 1500, createjs.Ease.getPowInOut(1))
                 .call(function(){
                     c++;
                     console.log(i+' shoot it '+c);
