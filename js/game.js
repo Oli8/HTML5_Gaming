@@ -21,11 +21,10 @@ function init(){
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     //to do
     //add sound
-    //help screen and start
     //enemies speed with no variable ??
     //boss movement
     //review enemies shoot
-    //pause
+    //improve can shoot
     var paused = false;
     var hit = 0;
     var hitBoss = 0;
@@ -177,7 +176,7 @@ function init(){
         for(var i=0; i<ennemiesArray.length; i++) {
             for (var j=0; j<shootArray.length; j++) {
                 var collision = ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0);
-                if(collision){
+                if(collision && canShoot){
                     console.log('hit!!! ' + ennemiesArray[i].life);
                     ennemiesArray[i].life -= fireLevel;
                     if(ennemiesArray[i].life <= 0){
@@ -257,7 +256,7 @@ function init(){
                     stage.update();
                     hitBoss++;
                     console.log('boss hit ! '+hitBoss);
-                    if(hitBoss == (level + 1) * 15){
+                    if(hitBoss === 2){ //(level + 1) * 15
                         stage.removeChild(bossArr[bossArr.length - 1]);
                         bossArr.splice(bossArr[bossArr.length - 1], 1);
                         stage.update();
@@ -266,7 +265,7 @@ function init(){
                         canShoot = false;
                         level++;
                         hitBoss = 0;
-                        enemiesSpeed -= 1000; //fucks everything up somehow??
+                        //enemiesSpeed -= 1000; //fucks everything up somehow??
                         if(level < levels.length)
                             addEnnemies();
                         else
