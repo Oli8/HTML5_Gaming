@@ -4,27 +4,28 @@ function init(){
     var img = {
         ship: 'PNG/playerShip2_red.png',    
         fire: {1: 'PNG/Lasers/laserBlue07.png', 2: 'PNG/Lasers/laserBlue06.png', 3: 'PNG/Lasers/laserBlue16.png',
-               enemie: 'PNG/Lasers/laserRed07.png'},
-        rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', 
-                big: 'PNG/Meteors/meteorBrown_big3.png'},
-        enemies: {1: 'PNG/Enemies/enemyBlue2.png'},
-        bosses: {1: 'PNG/Enemies/enemyBlack5.png'}, 
+               enemie: 'PNG/Lasers/laserRed07.png', hit: {blue: 'PNG/Lasers/LaserBlue10.png', red: 'PNG/Lasers/LaserBlue10.png'}},
+        rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', big: 'PNG/Meteors/meteorBrown_big3.png'},
+        enemies: {0: 'PNG/Enemies/enemyBlue1.png', 1: 'PNG/Enemies/enemyBlue2.png'},
+        bosses: {0: 'PNG/Enemies/enemyBlack5.png', 1: 'PNG/Enemies/enemyBlack4.png'}, 
         bonus: {life: 'PNG/Power-ups/pill_red.png', shoot: 'PNG/Power-ups/bolt_bronze.png', points: 'PNG/Power-ups/star_bronze.png'},
         life: 'PNG/UI/playerLife2_red.png'
     };
     var level = 0;
     //describe game levels
     var levels = [
-        {type: img.rocks.small, number: 6, boss: img.rocks.big},
-        {type: img.enemies[1], number: 5, boss: img.bosses[1]}
+        //{type: img.rocks.small, number: 6, shootY: 50, boss: img.rocks.big},
+        {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0]},
+        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1]}
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     //to do
     //add sound
+    //add something when enemies hit
     //enemies speed with no variable ??
     //boss movement
     //review enemies shoot
-    //improve can shoot
+    //improve key movement
     var paused = false;
     var hit = 0;
     var hitBoss = 0;
@@ -35,6 +36,9 @@ function init(){
     var pauseWrap = new createjs.Container();
     var startWrap = new createjs.Container();
     var end = false;
+    var move = [false, false, false, false];
+    document.onkeydown = handleKeyDown;
+    // document.onkeyup = handleKeyUp;
     //var shoot;
     var shootArray = [];
     var enemiesShootArr = [];
@@ -127,7 +131,7 @@ function init(){
                 if( c == levels[level].number){
                     canShoot = true;
                     moveEnemies();
-                    //enemiesShoot();
+                    enemiesShoot();
                 }
             })
             createjs.Ticker.setFPS(60);
@@ -265,7 +269,7 @@ function init(){
                         canShoot = false;
                         level++;
                         hitBoss = 0;
-                        enemiesSpeed -= 1000; //fucks everything up somehow??
+                        //enemiesSpeed -= 1000; //fucks everything up somehow??
                         if(level < levels.length)
                             addEnnemies();
                         else
@@ -296,21 +300,25 @@ function init(){
 
     function enemiesShoot(){
         console.log('ennemies shooting !!!');
-        for(var i=0; i<ennemiesArray.length; i++){
+        for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
             if( Math.random() > 0){
                 var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemie);
                 enemieShoot.rotation = 180;
-                enemieShoot.x = ennemiesArray[i].x;
-                enemieShoot.y = ennemiesArray[i].y;
+                enemieShoot.x = ennemiesArray[i].x + (ennemiesArray[i].image.width / 2) + 5;
+                enemieShoot.y = ennemiesArray[i].y + levels[level].shootY;
                 enemiesShootArr.push(enemieShoot);
                 stage.addChild(enemieShoot);
                 createjs.Tween.get(enemieShoot)
-                .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 2000, createjs.Ease.getPowInOut(1))
+                .to({y: 800}, 3000, createjs.Ease.getPowInOut(1))
+                .call(function(){
+                    c++;
+                    console.log(i+' shoot it '+c);
+                    if(c == d && !bossPhase) enemiesShoot();
+                })
+                //shoot speed: ((800 - ennemiesArray[i].y) * (5/4)) + 2000
                 createjs.Ticker.setFPS(60);
-                createjs.Ticker.addEventListener("tick", stage);
             }
         }
-        window.setInterval(enemiesShoot, enemiesSpeed);
     }
 
     function doBonus(type){
@@ -354,71 +362,123 @@ function init(){
         });
     }
 
-    $(document).keydown(function(e){
+    function handleKeyDown(e){
         var key = e.keyCode;
-        if(key == 38 && ship.y > ship.image.height / 2){
-            createjs.Tween.get(ship)
-            .to({y: ship.y - 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
+        if( key == 38 || key == 90){ //up and Z
             console.log('up');
+            move.map(function(v){return 'qzd';});          
+            //move[0] = true;
+            console.log(move);
         }
-        else if(key == 39 && ship.x < stage.canvas.width - ship.image.width - 25){
-            createjs.Tween.get(ship)
-            .to({x: ship.x + 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('right');
+        else if( key == 39 || key == 68){ //right and D
+            console.log('right');   
+            move.map(function(v){return 'qzd';});          
+            //move[1] = true;
+            console.log(move);         
         }
-        else if(key == 40 && ship.y < stage.canvas.height - ship.image.height - 30){
-            createjs.Tween.get(ship)
-            .to({y: ship.y + 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('down ' + ship.y);
+        else if( key == 40 || key == 83){ // down and S
+            console.log('down');
+            move.map(function(v){return 'qzd';});          
+            //move[2] = true;
+            console.log(move);
         }
-        else if(key == 37 && ship.x > 0){
-            createjs.Tween.get(ship)
-            .to({x: ship.x - 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
+        else if( key == 37 || key == 81){ // left and Q
             console.log('left');
+            move.map(function(v){return 'qzd';});          
+            //move[3] = true;
+            console.log(move);
         }
-        else if(key == 32 && canShoot && !paused){
-            var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
-            shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
-            shoot.y = ship.y - (ship.image.height / 2);
-            shootArray.push(shoot);
-            stage.addChild(shoot);
-            var speed = (ship.y + 1000) * (4/3); 
-            createjs.Tween.get(shoot)
-            .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('fire');
+        else if( key == 32 || key == 17){ // space and ctrl
+            console.log('shoot');
         }
-        else if(key == 27){
-            if(!paused){
-                $('#canvas').css('animation-iteration-count', '0');
-                createjs.Ticker.setPaused(paused = true);
-                var pauseText = new createjs.Text('PAUSE', '75px RAVIE', 'white');
-                pauseText.x = 340;
-                pauseText.y = 300;
-                var restart = new createjs.Text('RESTART', '40px RAVIE', 'white');
-                restart.x = 380;
-                restart.y = 400;
-                $('#canvas').click(function(){location.reload();});;
-                pauseWrap.addChild(pauseText, restart);
-                stage.addChild(pauseWrap);
-                stage.alpha = 0.5;
-            }
-            else{
-                $('#canvas').css('animation-iteration-count', 'infinite');
-                createjs.Ticker.setPaused(paused = false);
-                stage.removeChild(pauseWrap);
-                stage.alpha = 1;
-            }
+        else if( key == 80 || key == 27){ // P and escape
+            console.log('pause');
         }
-    });
+    }
+
+    function handleKeyUp(e){
+        switch (e.keyCode){
+            case KEYCODE_SPACE:
+            case 87:  // W
+                fireBullet();
+                break;
+            case KEYCODE_LEFT:
+            case 65:  // A
+                moveLeft = false;
+                break;
+            case KEYCODE_RIGHT:
+            case 68:  // D
+                moveRight = false;
+                break;
+                
+        }
+    }
+
+    // $(document).keydown(function(e){
+    //     var key = e.keyCode;
+    //     if(key == 38 && ship.y > ship.image.height / 2){
+    //         createjs.Tween.get(ship)
+    //         .to({y: ship.y - 40}, 100, createjs.Ease.getPowInOut(1))
+    //         createjs.Ticker.setFPS(60);
+    //         // createjs.Ticker.addEventListener("tick", stage);
+    //         console.log('up');
+    //     }
+    //     else if(key == 39 && ship.x < stage.canvas.width - ship.image.width - 25){
+    //         createjs.Tween.get(ship)
+    //         .to({x: ship.x + 40}, 100, createjs.Ease.getPowInOut(1))
+    //         createjs.Ticker.setFPS(60);
+    //         // createjs.Ticker.addEventListener("tick", stage);
+    //         console.log('right');
+    //     }
+    //     else if(key == 40 && ship.y < stage.canvas.height - ship.image.height - 30){
+    //         createjs.Tween.get(ship)
+    //         .to({y: ship.y + 40}, 100, createjs.Ease.getPowInOut(1))
+    //         createjs.Ticker.setFPS(60);
+    //         // createjs.Ticker.addEventListener("tick", stage);
+    //         console.log('down ' + ship.y);
+    //     }
+    //     else if(key == 37 && ship.x > 0){
+    //         createjs.Tween.get(ship)
+    //         .to({x: ship.x - 40}, 100, createjs.Ease.getPowInOut(1))
+    //         createjs.Ticker.setFPS(60);
+    //         // createjs.Ticker.addEventListener("tick", stage);
+    //         console.log('left');
+    //     }
+    //     else if(key == 32 && canShoot && !paused){
+    //         var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
+    //         shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
+    //         shoot.y = ship.y - (ship.image.height / 2);
+    //         shootArray.push(shoot);
+    //         stage.addChild(shoot);
+    //         var speed = (ship.y + 1000) * (4/3); 
+    //         createjs.Tween.get(shoot)
+    //         .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
+    //         createjs.Ticker.setFPS(60);
+    //         // createjs.Ticker.addEventListener("tick", stage);
+    //         console.log('fire');
+    //     }
+    //     else if(key == 27){
+    //         if(!paused){
+    //             $('#canvas').css('animation-iteration-count', '0');
+    //             createjs.Ticker.setPaused(paused = true);
+    //             var pauseText = new createjs.Text('PAUSE', '75px RAVIE', 'white');
+    //             pauseText.x = 340;
+    //             pauseText.y = 300;
+    //             var restart = new createjs.Text('RESTART', '40px RAVIE', 'white');
+    //             restart.x = 380;
+    //             restart.y = 400;
+    //             $('#canvas').click(function(){location.reload();});;
+    //             pauseWrap.addChild(pauseText, restart);
+    //             stage.addChild(pauseWrap);
+    //             stage.alpha = 0.5;
+    //         }
+    //         else{
+    //             $('#canvas').css('animation-iteration-count', 'infinite');
+    //             createjs.Ticker.setPaused(paused = false);
+    //             stage.removeChild(pauseWrap);
+    //             stage.alpha = 1;
+    //         }
+    //     }
+    // });
 
 }
