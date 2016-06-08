@@ -41,7 +41,7 @@ function init(){
     var ennemiesArray = [];
     var livesArray = [];
     //var ennemies;
-    var enemiesSpeed = 5000;    
+    var enemiesSpeed = 5000;//why not    
     var score = 0;
     var scoreWrap;
     var loaded = 0;
@@ -227,7 +227,7 @@ function init(){
             }
         }
         //check if all enemies died and if so launch boss
-        if(ennemiesArray.length == 0 && !bossPhase){
+        if(ennemiesArray.length == 0 && !bossPhase && !end){
             bossPhase = true;
             console.log('stage 1 completed');
             addBoss();
@@ -265,7 +265,7 @@ function init(){
                         canShoot = false;
                         level++;
                         hitBoss = 0;
-                        //enemiesSpeed -= 1000; //fucks everything up somehow??
+                        enemiesSpeed -= 1000; //fucks everything up somehow??
                         if(level < levels.length)
                             addEnnemies();
                         else
