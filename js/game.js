@@ -26,7 +26,9 @@ function init(){
     //boss movement
     //review enemies shoot
     //improve key movement
+    var soundEnable = true;
     var paused = false;
+    var started = false;
     var hit = 0;
     var hitBoss = 0;
     var canShoot = false;
@@ -70,6 +72,9 @@ function init(){
     life.src = 'img/' + img.life;
     life.onload = loadImage;
 
+    createjs.Sound.registerSound("img/Bonus/sfx_laser2.ogg", 'laser');
+    createjs.Sound.registerSound("img/Bonus/sfx_lose.ogg", 'lose');
+
     function loadImage(e){
         loaded++;
         if(loaded == toLoad){
@@ -83,6 +88,7 @@ function init(){
     }
 
     function start(){
+        started = true;
         stage.removeChild(startWrap);
         addShip();
         addEnnemies();
@@ -232,6 +238,10 @@ function init(){
                 ennemiesArray.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
                 livesArray.splice(livesArray.length - 1, 1);
+                if(soundEnable){
+                    var sound = createjs.Sound.play('lose');
+                    sound.volume = 1;
+                }
                 stage.update();
                 if( livesArray.length == 0){
                     console.log('game over !');
@@ -248,6 +258,10 @@ function init(){
                 stage.removeChild(livesArray[livesArray.length-1]);
                 livesArray.splice(livesArray.length - 1, 1);
                 stage.update();
+                if(soundEnable){
+                    var sound = createjs.Sound.play('lose');
+                    sound.volume = 1;
+                }
                 if( livesArray.length == 0){
                     gameOver(0);
                 }
@@ -399,7 +413,8 @@ function init(){
         else if( key == 37 || key == 81){ // left and Q          
             move.left = true;
         }
-        else if( key == 32 || key == 17 && canShoot && !paused){ // space and ctrl
+        else if( (key == 32 || key == 17) && canShoot && !paused && started){ // space and ctrl
+            if(soundEnable) createjs.Sound.play('laser');
             var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
             shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
             shoot.y = ship.y - (ship.image.height / 2);
