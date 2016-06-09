@@ -36,9 +36,9 @@ function init(){
     var pauseWrap = new createjs.Container();
     var startWrap = new createjs.Container();
     var end = false;
-    var move = [false, false, false, false];
-    //document.onkeydown = handleKeyDown;
-    // document.onkeyup = handleKeyUp;
+    var move = {up: false, right: false, down: false, left: false};
+    document.onkeydown = handleKeyDown;
+    document.onkeyup = handleKeyUp;
     //var shoot;
     var shootArray = [];
     var enemiesShootArr = [];
@@ -176,6 +176,15 @@ function init(){
     }
 
     function tick(event){
+        //movement
+        if(move.up == true && ship.y > 0 )
+            ship.y -= 10
+        if(move.right == true && ship.x < stage.canvas.width - ship.image.width)
+            ship.x += 10
+        if(move.down == true && ship.y < stage.canvas.height - ship.image.height)
+            ship.y += 10
+        if(move.left == true && ship.x > 0)
+            ship.x -= 10
         //shoot hit enemies
         for(var i=0; i<ennemiesArray.length; i++) {
             for (var j=0; j<shootArray.length; j++) {
@@ -327,7 +336,7 @@ function init(){
                 .call(function(){
                     c++;
                     console.log(i+' shoot it '+c);
-                    if(c == d && !bossPhase) enemiesShoot();
+                    if(c == d && !bossPhase && !end) enemiesShoot();
                 })
                 //shoot speed: ((800 - ennemiesArray[i].y) * (5/4)) + 2000
                 createjs.Ticker.setFPS(60);
@@ -379,86 +388,18 @@ function init(){
     function handleKeyDown(e){
         var key = e.keyCode;
         if( key == 38 || key == 90){ //up and Z
-            console.log('up');
-            move.map(function(v){return 'qzd';});          
-            //move[0] = true;
-            console.log(move);
+            move.up = true;
         }
-        else if( key == 39 || key == 68){ //right and D
-            console.log('right');   
-            move.map(function(v){return 'qzd';});          
-            //move[1] = true;
-            console.log(move);         
+        else if( key == 39 || key == 68){ //right and D             
+            move.right = true;       
         }
-        else if( key == 40 || key == 83){ // down and S
-            console.log('down');
-            move.map(function(v){return 'qzd';});          
-            //move[2] = true;
-            console.log(move);
+        else if( key == 40 || key == 83){ // down and S          
+            move.down = true;
         }
-        else if( key == 37 || key == 81){ // left and Q
-            console.log('left');
-            move.map(function(v){return 'qzd';});          
-            //move[3] = true;
-            console.log(move);
+        else if( key == 37 || key == 81){ // left and Q          
+            move.left = true;
         }
-        else if( key == 32 || key == 17){ // space and ctrl
-            console.log('shoot');
-        }
-        else if( key == 80 || key == 27){ // P and escape
-            console.log('pause');
-        }
-    }
-
-    function handleKeyUp(e){
-        switch (e.keyCode){
-            case KEYCODE_SPACE:
-            case 87:  // W
-                fireBullet();
-                break;
-            case KEYCODE_LEFT:
-            case 65:  // A
-                moveLeft = false;
-                break;
-            case KEYCODE_RIGHT:
-            case 68:  // D
-                moveRight = false;
-                break;
-                
-        }
-    }
-
-    $(document).keydown(function(e){
-        var key = e.keyCode;
-        if(key == 38 && ship.y > ship.image.height / 2){
-            createjs.Tween.get(ship)
-            .to({y: ship.y - 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('up');
-        }
-        else if(key == 39 && ship.x < stage.canvas.width - ship.image.width - 25){
-            createjs.Tween.get(ship)
-            .to({x: ship.x + 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('right');
-        }
-        else if(key == 40 && ship.y < stage.canvas.height - ship.image.height - 30){
-            createjs.Tween.get(ship)
-            .to({y: ship.y + 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('down ' + ship.y);
-        }
-        else if(key == 37 && ship.x > 0){
-            createjs.Tween.get(ship)
-            .to({x: ship.x - 40}, 100, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('left');
-        }
-        else if(key == 32 && canShoot && !paused){
+        else if( key == 32 || key == 17 && canShoot && !paused){ // space and ctrl
             var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
             shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
             shoot.y = ship.y - (ship.image.height / 2);
@@ -468,10 +409,8 @@ function init(){
             createjs.Tween.get(shoot)
             .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
             createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
-            console.log('fire');
         }
-        else if(key == 27){
+        else if( key == 80 || key == 27){ // P and escape
             if(!paused){
                 $('#canvas').css('animation-iteration-count', '0');
                 createjs.Ticker.setPaused(paused = true);
@@ -493,6 +432,22 @@ function init(){
                 stage.alpha = 1;
             }
         }
-    });
+    }
+
+    function handleKeyUp(e){
+        var key = e.keyCode;
+        if( key == 38 || key == 90){ //up and Z
+            move.up = false;
+        }
+        else if( key == 39 || key == 68){ //right and D             
+            move.right = false;         
+        }
+        else if( key == 40 || key == 83){ // down and S         
+            move.down = false;
+        }
+        else if( key == 37 || key == 81){ // left and Q         
+            move.left = false;
+        }
+    }
 
 }
