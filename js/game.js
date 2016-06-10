@@ -26,7 +26,8 @@ function init(){
     //boss movement
     //review enemies shoot
     //improve key movement
-    var soundEnable = true;
+    //sound param based on lcaolstorage
+    var soundEnable = localStorage.getItem('sound') || 'enable';
     var paused = false;
     var started = false;
     var hit = 0;
@@ -101,15 +102,27 @@ function init(){
         helpText = new createjs.Text(helpText, '20px RAVIE', 'white');
         helpText.x = 40;
         helpText.y = 200;
-        var startText = new createjs.Text('START', '40px RAVIE', 'white');
-        startText.x = 380;
+        var startText = new createjs.Text('PRESS ENTER TO START', '40px RAVIE', 'white');
+        startText.x = 200;
         startText.y = 400;
-        $('#canvas').click(function(){
-            if(!end) start();
-        });
-        startWrap.addChild(helpText, startText);
+        var soundEnableText = soundEnable == 'enable' ? 'ON' : 'OFF';
+        var soundText = new createjs.Text('SOUND : ' + soundEnableText, '20px RAVIE', 'white');
+        soundText.x = 390;
+        soundText.y = 500;
+        $(document).keydown(function(e){
+            if(e.keyCode == 13 && !end) start()
+        })
+        startWrap.addChild(helpText, startText, soundText);
         stage.addChild(startWrap);
         stage.update();
+        $('#canvas').click(function(){
+            if(!started){
+                localStorage.setItem('sound', soundEnable == 'enable' ? 'disable' : 'enable');
+                soundEnable = localStorage.getItem('sound');
+                soundEnableText = soundEnable == 'enable' ? 'ON' : 'OFF';
+                soundText.text = 'SOUND : ' + soundEnableText;
+            }
+        });
         createjs.Ticker.addEventListener("tick", stage);
     }
        
@@ -238,13 +251,12 @@ function init(){
                 ennemiesArray.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
                 livesArray.splice(livesArray.length - 1, 1);
-                if(soundEnable){
+                if(soundEnable == 'enable'){
                     var sound = createjs.Sound.play('lose');
                     sound.volume = 1;
                 }
                 stage.update();
                 if( livesArray.length == 0){
-                    console.log('game over !');
                     gameOver(0);
                 }
             }
@@ -258,7 +270,7 @@ function init(){
                 stage.removeChild(livesArray[livesArray.length-1]);
                 livesArray.splice(livesArray.length - 1, 1);
                 stage.update();
-                if(soundEnable){
+                if(soundEnable == 'enable'){
                     var sound = createjs.Sound.play('lose');
                     sound.volume = 1;
                 }
@@ -359,7 +371,6 @@ function init(){
     }
 
     function doBonus(type){
-        console.log('bonus: '+type);
         if(type == 'life'){
             var life = new createjs.Bitmap('img/' + img.life);
             life.x = 900;
@@ -414,7 +425,7 @@ function init(){
             move.left = true;
         }
         else if( (key == 32 || key == 17) && canShoot && !paused && started){ // space and ctrl
-            if(soundEnable) createjs.Sound.play('laser');
+            if(soundEnable == 'enable') createjs.Sound.play('laser');
             var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
             shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
             shoot.y = ship.y - (ship.image.height / 2);
@@ -451,18 +462,14 @@ function init(){
 
     function handleKeyUp(e){
         var key = e.keyCode;
-        if( key == 38 || key == 90){ //up and Z
+        if( key == 38 || key == 90) //up and Z
             move.up = false;
-        }
-        else if( key == 39 || key == 68){ //right and D             
+        else if( key == 39 || key == 68) //right and D             
             move.right = false;         
-        }
-        else if( key == 40 || key == 83){ // down and S         
+        else if( key == 40 || key == 83) // down and S         
             move.down = false;
-        }
-        else if( key == 37 || key == 81){ // left and Q         
+        else if( key == 37 || key == 81) // left and Q         
             move.left = false;
-        }
     }
 
 }
