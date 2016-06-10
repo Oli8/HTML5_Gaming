@@ -26,7 +26,10 @@ function init(){
     //use boss as enemies ?
     //test enemies movement with boss in enemies array
     //highscore
+    //enemies movement works on the first game after server launch ?? 
+    //acutally i have no idea whatsoever
     var soundEnable = localStorage.getItem('sound') || 'enable';
+    var highscore = localStorage.getItem('highscore') || [];
     var paused = false;
     var started = false;
     var hit = 0;
