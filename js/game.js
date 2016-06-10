@@ -24,6 +24,8 @@ function init(){
     //boss movement
     //review enemies shoot
     //use boss as enemies ?
+    //test enemies movement with boss in enemies array
+    //highscore
     var soundEnable = localStorage.getItem('sound') || 'enable';
     var paused = false;
     var started = false;
@@ -315,16 +317,16 @@ function init(){
     }
 
     function moveEnemies(){
-        console.log('move it');
+        console.log('move it'); //try without ennemies speed
         for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
             var randX = Math.floor(Math.random() * 960) + 1;
             var randY = Math.floor(Math.random() * 750) + 1;
             createjs.Tween.get(ennemiesArray[i])
-            .to({y: randY, x:randX}, enemiesSpeed, createjs.Ease.getPowInOut(1))
+            .to({y: randY, x:randX}, 5000, createjs.Ease.getPowInOut(1))
             .call(function(){
                 c++;
                 console.log(i+' remove it '+c);
-                if(c == d) moveEnemies();
+                if(c == d && !bossPhase) moveEnemies(); //!bossphase ??
             })
             createjs.Ticker.setFPS(60);
             // createjs.Ticker.addEventListener("tick", stage);
