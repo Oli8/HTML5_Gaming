@@ -75,6 +75,7 @@ function init(){
 
     createjs.Sound.registerSound("img/Bonus/sfx_laser2.ogg", 'laser');
     createjs.Sound.registerSound("img/Bonus/sfx_lose.ogg", 'lose');
+    createjs.Sound.registerSound("img/Bonus/sfx_shieldUp.ogg", 'bonus');
 
     function loadImage(e){
         loaded++;
@@ -212,7 +213,7 @@ function init(){
                     console.log('hit!!! ' + ennemiesArray[i].life);
                     ennemiesArray[i].life -= fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0.8){
+                        if(Math.random() > 0.85){
                             console.log('bonus !!!');
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
@@ -288,6 +289,7 @@ function init(){
         //ship get bonus
         for(var i=0; i<bonusArr.length; i++){
             if( ndgmr.checkPixelCollision(bonusArr[i], ship, 0)){
+                if(soundEnable == 'enable') createjs.Sound.play('bonus');
                 doBonus(bonusArr[i].type);
                 stage.removeChild(bonusArr[i]);
                 bonusArr.splice(i, 1);
