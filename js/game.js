@@ -1,5 +1,4 @@
 function init(){
-    console.log('start');
     var stage = new createjs.Stage("canvas");
     var img = {
         ship: 'PNG/playerShip2_red.png',    
@@ -20,13 +19,11 @@ function init(){
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     //to do
-    //add sound
     //add something when enemies hit
     //enemies speed with no variable ??
     //boss movement
     //review enemies shoot
-    //improve key movement
-    //sound param based on lcaolstorage
+    //use boss as enemies ?
     var soundEnable = localStorage.getItem('sound') || 'enable';
     var paused = false;
     var started = false;
@@ -42,12 +39,12 @@ function init(){
     var move = {up: false, right: false, down: false, left: false};
     document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
-    //var shoot;
+    
     var shootArray = [];
     var enemiesShootArr = [];
     var ennemiesArray = [];
     var livesArray = [];
-    //var ennemies;
+    
     var enemiesSpeed = 5000;//why not    
     var score = 0;
     var scoreWrap;
@@ -81,11 +78,6 @@ function init(){
         loaded++;
         if(loaded == toLoad){
             startScreen();
-            // addShip();
-            //addEnnemies();
-            // addLives();
-            // addScore();
-            //createjs.Ticker.on("tick", tick);
         }
     }
 
@@ -115,7 +107,6 @@ function init(){
         })
         startWrap.addChild(helpText, startText, soundText);
         stage.addChild(startWrap);
-        stage.update();
         $('#canvas').click(function(){
             if(!started){
                 localStorage.setItem('sound', soundEnable == 'enable' ? 'disable' : 'enable');
@@ -130,9 +121,8 @@ function init(){
     function addShip(){
         ship = new createjs.Bitmap('img/' + img.ship);
         stage.addChild(ship);
-        ship.x = 435; //480 - (ship.image.width / 2)
-        ship.y = 650; //750 - (ship.image.height) - 10
-        stage.update();
+        ship.x = 435; 
+        ship.y = 650; 
     }
 
     function addEnnemies(){
@@ -151,7 +141,7 @@ function init(){
                 if( c == levels[level].number){
                     canShoot = true;
                     moveEnemies();
-                    enemiesShoot();
+                    //enemiesShoot();
                 }
             })
             createjs.Ticker.setFPS(60);
@@ -167,14 +157,12 @@ function init(){
             livesArray.push(life);
             stage.addChild(life);
         }
-        stage.update();
     }
 
     function addScore(){
         scoreWrap = new createjs.Text('0'.repeat(5 - String(score).length) + score, '40px RAVIE', 'white');
         scoreWrap.x = 800;
         stage.addChild(scoreWrap);
-        stage.update();
     }
 
     function addBoss(){
@@ -210,11 +198,9 @@ function init(){
             for (var j=0; j<shootArray.length; j++) {
                 var collision = ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0);
                 if(collision && canShoot){
-                    console.log('hit!!! ' + ennemiesArray[i].life);
                     ennemiesArray[i].life -= fireLevel;
                     if(ennemiesArray[i].life <= 0){
                         if(Math.random() > 0.85){
-                            console.log('bonus !!!');
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
@@ -226,7 +212,6 @@ function init(){
                             createjs.Tween.get(bonus)
                             .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 2000, createjs.Ease.getPowInOut(1))
                             createjs.Ticker.setFPS(60);
-                            // createjs.Ticker.addEventListener("tick", stage);
                         }
                         stage.removeChild(ennemiesArray[i]);
                         ennemiesArray.splice(i, 1);
@@ -247,7 +232,6 @@ function init(){
         for(var i=0; i<ennemiesArray.length; i++){
             var coll = ndgmr.checkPixelCollision(ennemiesArray[i], ship, 0);
             if(coll){
-                console.log('dead :(');
                 stage.removeChild(ennemiesArray[i]);
                 ennemiesArray.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
@@ -265,7 +249,6 @@ function init(){
         //enemies shoot hit ship
         for(var i=0; i<enemiesShootArr.length; i++){
             if(ndgmr.checkPixelCollision(enemiesShootArr[i], ship, 0)){
-                console.log('you got hit !!');
                 stage.removeChild(enemiesShootArr[i]);
                 enemiesShootArr.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
@@ -283,7 +266,7 @@ function init(){
         //check if all enemies died and if so launch boss
         if(ennemiesArray.length == 0 && !bossPhase && !end){
             bossPhase = true;
-            console.log('stage 1 completed');
+            console.log('stage completed');
             addBoss();
         }
         //ship get bonus
