@@ -32,6 +32,7 @@ function init(){
     var hit = 0;
     var hitBoss = 0;
     var canShoot = false;
+    var canFire = true;
     var bossArr = [];
     var bossPhase = false;
     var bonusArr = [];
@@ -351,7 +352,6 @@ function init(){
                 .to({y: 800}, 1000, createjs.Ease.getPowInOut(1))
                 .call(function(){
                     c++;
-                    console.log(i+' shoot it '+c);
                     if(c == d && !bossPhase && !end) enemiesShoot();
                 }) 
                 createjs.Ticker.setFPS(60);
@@ -379,7 +379,7 @@ function init(){
         createjs.Tween.get(bShoot)
         .to({y: 800}, 1000, createjs.Ease.getPowInOut(1))
         .call(function(){
-            if(bossPhase) bossShoot();
+            if(bossPhase && !end) bossShoot();
         })
         createjs.Ticker.setFPS(60);
     }
@@ -443,15 +443,19 @@ function init(){
                 var sound = createjs.Sound.play('laser');
                 sound.volume = 0.3;
             }
-            var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
-            shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
-            shoot.y = ship.y - (ship.image.height / 2);
-            shootArray.push(shoot);
-            stage.addChild(shoot);
-            var speed = (ship.y + 1000) * (4/3); 
-            createjs.Tween.get(shoot)
-            .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
-            createjs.Ticker.setFPS(60);
+            if(canFire){
+                var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
+                shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
+                shoot.y = ship.y - (ship.image.height / 2);
+                shootArray.push(shoot);
+                stage.addChild(shoot);
+                var speed = (ship.y + 1000) * (4/3); 
+                createjs.Tween.get(shoot)
+                .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
+                createjs.Ticker.setFPS(60);
+                canFire = false;
+                setTimeout(function(){canFire = true}, 200);
+            }
         }
         else if( key == 80 || key == 27){ // P and escape
             if(!paused){
