@@ -182,6 +182,7 @@ function init(){
         .call(function(){
             console.log('move boss');
             moveBoss();
+            bossShoot();
         })
         createjs.Ticker.setFPS(60);
         createjs.Ticker.addEventListener("tick", stage);
@@ -371,7 +372,17 @@ function init(){
     }
 
     function bossShoot(){
-        
+        var bShoot = new createjs.Bitmap('img/' +img.fire.enemie);
+        bShoot.x = bossArr[bossArr.length-1].x;
+        bShoot.y = bossArr[bossArr.length-1].y;
+        enemiesShootArr.push(bShoot);
+        stage.addChild(bShoot);
+        createjs.Tween.get(bShoot)
+        .to({y: 800}, 1500, createjs.Ease.getPowInOut(1))
+        .call(function(){
+            if(bossPhase) bossShoot();
+        })
+        createjs.Ticker.setFPS(60);
     }
 
     function doBonus(type){
