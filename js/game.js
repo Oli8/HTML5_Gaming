@@ -175,6 +175,7 @@ function init(){
         var boss = new createjs.Bitmap('img/' + levels[level].boss);
         boss.x = 400;
         boss.y = -5;
+        boss.lives = (level + 1) * 5;
         bossArr.push(boss);
         stage.addChild(boss);
         createjs.Tween.get(boss)
@@ -298,8 +299,9 @@ function init(){
                     shootArray.splice(i, 1);
                     stage.update();
                     hitBoss++;
+                    bossArr[bossArr.length-1].lives -= fireLevel;
                     console.log('boss hit ! '+hitBoss);
-                    if(hitBoss === 2){ //(level + 1) * 15
+                    if(bossArr[bossArr.length-1].lives <= 0){ 
                         stage.removeChild(bossArr[bossArr.length - 1]);
                         bossArr.splice(bossArr[bossArr.length - 1], 1);
                         stage.update();
@@ -307,7 +309,6 @@ function init(){
                         bossPhase = false;
                         canShoot = false;
                         level++;
-                        hitBoss = 0;
                         //enemiesSpeed -= 1000; //fucks everything up somehow??
                         if(level < levels.length)
                             addEnnemies();
@@ -348,13 +349,12 @@ function init(){
                 enemiesShootArr.push(enemieShoot);
                 stage.addChild(enemieShoot);
                 createjs.Tween.get(enemieShoot)
-                .to({y: 800}, 1500, createjs.Ease.getPowInOut(1))
+                .to({y: 800}, 1000, createjs.Ease.getPowInOut(1))
                 .call(function(){
                     c++;
                     console.log(i+' shoot it '+c);
                     if(c == d && !bossPhase && !end) enemiesShoot();
-                })
-                //shoot speed: ((800 - ennemiesArray[i].y) * (5/4)) + 2000
+                }) 
                 createjs.Ticker.setFPS(60);
             }
         }
@@ -373,12 +373,12 @@ function init(){
 
     function bossShoot(){
         var bShoot = new createjs.Bitmap('img/' +img.fire.enemie);
-        bShoot.x = bossArr[bossArr.length-1].x;
+        bShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
         bShoot.y = bossArr[bossArr.length-1].y;
         enemiesShootArr.push(bShoot);
         stage.addChild(bShoot);
         createjs.Tween.get(bShoot)
-        .to({y: 800}, 1500, createjs.Ease.getPowInOut(1))
+        .to({y: 800}, 1000, createjs.Ease.getPowInOut(1))
         .call(function(){
             if(bossPhase) bossShoot();
         })
