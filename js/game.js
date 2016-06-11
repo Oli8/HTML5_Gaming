@@ -13,17 +13,18 @@ function init(){
     var level = 0;
     //describe game levels
     var levels = [
-        // {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
-        // {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200},
+        {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
+        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200},
         // {type: img.enemies[2], number: 4, shootY: 100, boss: img.bosses[2], pos: 175},
         // {type: img.enemies[3], number: 5, shootY: 100, boss: img.bosses[3], pos: 150},
-        {type: img.enemies[4], number: 6, shootY: 100, boss: img.bosses[4], pos: 125}
+        // {type: img.enemies[4], number: 6, shootY: 100, boss: img.bosses[4], pos: 125}
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     //to do
     //add something when enemies hit
     //highscore
     //review score
+    //alpha on boss
     var soundEnable = localStorage.getItem('sound') || 'enable';
     var highscore = localStorage.getItem('highscore') || [];
     var paused = false;
@@ -217,7 +218,7 @@ function init(){
                         }
                         stage.removeChild(ennemiesArray[i]);
                         ennemiesArray.splice(i, 1);
-                        score += 50 * (level + 1); 
+                        score += (50 * (level + 1)) * fireLevel; 
                         scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                     }
                     else{
@@ -297,7 +298,9 @@ function init(){
                     hitBoss++;
                     bossArr[bossArr.length-1].lives -= fireLevel;
                     console.log('boss hit ! '+hitBoss);
+                    score += (100 * (level + 1)) * fireLevel;
                     if(bossArr[bossArr.length-1].lives <= 0){ 
+                        score += 1000;
                         stage.removeChild(bossArr[bossArr.length - 1]);
                         bossArr.splice(bossArr[bossArr.length - 1], 1);
                         stage.update();
@@ -311,6 +314,7 @@ function init(){
                         else
                             gameOver(1);
                     }
+                    scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                 }
             }
         }
