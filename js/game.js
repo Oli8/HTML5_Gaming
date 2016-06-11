@@ -146,7 +146,7 @@ function init(){
                 if( c == levels[level].number){
                     canShoot = true;
                     moveEnemies();
-                    //enemiesShoot();
+                    enemiesShoot();
                 }
             })
             createjs.Ticker.setFPS(60);
@@ -178,12 +178,11 @@ function init(){
         bossArr.push(boss);
         stage.addChild(boss);
         createjs.Tween.get(boss)
-        .to({y: 1000}, 15000, createjs.Ease.getPowInOut(1))
-        // .call(function(){
-        //     if(bossPhase)
-        //         gameOver(0);
-        // })
-        //not sure about this
+        .to({y: 150}, 1000, createjs.Ease.getPowInOut(1))
+        .call(function(){
+            console.log('move boss');
+            moveBoss();
+        })
         createjs.Ticker.setFPS(60);
         createjs.Ticker.addEventListener("tick", stage);
     }
@@ -205,7 +204,7 @@ function init(){
                 if(collision && canShoot){
                     ennemiesArray[i].life -= fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0.85){
+                        if(Math.random() > 0.8){
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
@@ -325,7 +324,7 @@ function init(){
             var randX = Math.floor(Math.random() * 960) + 1;
             var randY = Math.floor(Math.random() * 750) + 1;
             createjs.Tween.get(ennemiesArray[i])
-            .to({y: randY, x:randX}, 5000, createjs.Ease.getPowInOut(1))
+            .to({y: randY, x:randX}, 2000, createjs.Ease.getPowInOut(1))
             .call(function(){
                 c++;
                 console.log(i+' remove it '+c);
@@ -358,6 +357,21 @@ function init(){
                 createjs.Ticker.setFPS(60);
             }
         }
+    }
+
+    function moveBoss(){
+        var randX = Math.floor(Math.random() * 960) + 1;
+        var randY = Math.floor(Math.random() * 750) + 1;
+        createjs.Tween.get(bossArr[bossArr.length-1])
+        .to({y: randY, x:randX}, 2000, createjs.Ease.getPowInOut(1))
+        .call(function(){
+            if(bossPhase) moveBoss();
+        })
+        createjs.Ticker.setFPS(60);
+    }
+
+    function bossShoot(){
+        
     }
 
     function doBonus(type){
@@ -415,7 +429,10 @@ function init(){
             move.left = true;
         }
         else if( (key == 32 || key == 17) && canShoot && !paused && started){ // space and ctrl
-            if(soundEnable == 'enable') createjs.Sound.play('laser');
+            if(soundEnable == 'enable'){
+                var sound = createjs.Sound.play('laser');
+                sound.volume = 0.3;
+            }
             var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
             shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
             shoot.y = ship.y - (ship.image.height / 2);
