@@ -13,10 +13,11 @@ function init(){
     var level = 0;
     //describe game levels
     var levels = [
-        //{type: img.rocks.small, number: 6, shootY: 50, boss: img.rocks.big},
-        {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
-        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200},
-        {type: img.enemies[2], number: 4, shootY: 100, boss: img.bosses[2], pos: 175}
+        // {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
+        // {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200},
+        // {type: img.enemies[2], number: 4, shootY: 100, boss: img.bosses[2], pos: 175},
+        // {type: img.enemies[3], number: 5, shootY: 100, boss: img.bosses[3], pos: 150},
+        {type: img.enemies[4], number: 6, shootY: 100, boss: img.bosses[4], pos: 125}
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     //to do
