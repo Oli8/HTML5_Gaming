@@ -23,8 +23,6 @@ function init(){
     //to do
     //add something when enemies hit
     //highscore
-    //review score
-    //alpha on boss
     var soundEnable = localStorage.getItem('sound') || 'enable';
     var highscore = localStorage.getItem('highscore') || [];
     var paused = false;
@@ -407,7 +405,7 @@ function init(){
         end = true;
         var text, scoreBox, msg, replay;
         msg = win ? 'Congratulations !' : 'Game over';
-            
+        if(win) score += 1000 * livesArray.length;    
         stage.removeAllChildren();
         text = new createjs.Text(msg, '75px RAVIE', 'white');
         text.x = win ? 6 : 225;
