@@ -5,8 +5,8 @@ function init(){
         fire: {1: 'PNG/Lasers/laserBlue07.png', 2: 'PNG/Lasers/laserBlue06.png', 3: 'PNG/Lasers/laserBlue16.png',
                enemie: 'PNG/Lasers/laserRed07.png', hit: {blue: 'PNG/Lasers/LaserBlue10.png', red: 'PNG/Lasers/LaserBlue10.png'}},
         rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', big: 'PNG/Meteors/meteorBrown_big3.png'},
-        enemies: {0: 'PNG/Enemies/enemyBlue1.png', 1: 'PNG/Enemies/enemyBlue2.png'},
-        bosses: {0: 'PNG/Enemies/enemyBlack5.png', 1: 'PNG/Enemies/enemyBlack4.png'}, 
+        enemies: {0: 'PNG/Enemies/enemyBlue1.png', 1: 'PNG/Enemies/enemyBlue2.png', 2: 'PNG/Enemies/enemyBlue3.png', 3: 'PNG/Enemies/enemyBlue4.png', 4: 'PNG/Enemies/enemyBlue5.png'},
+        bosses: {0: 'PNG/Enemies/enemyBlack5.png', 1: 'PNG/Enemies/enemyBlack4.png', 2: 'PNG/Enemies/enemyBlack3.png', 3: 'PNG/Enemies/enemyBlack2.png', 4: 'PNG/Enemies/enemyBlack1.png'}, 
         bonus: {life: 'PNG/Power-ups/pill_red.png', shoot: 'PNG/Power-ups/bolt_bronze.png', points: 'PNG/Power-ups/star_bronze.png'},
         life: 'PNG/UI/playerLife2_red.png'
     };
@@ -15,19 +15,14 @@ function init(){
     var levels = [
         //{type: img.rocks.small, number: 6, shootY: 50, boss: img.rocks.big},
         {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
-        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200}
+        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200},
+        {type: img.enemies[2], number: 4, shootY: 100, boss: img.bosses[2], pos: 175}
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     //to do
     //add something when enemies hit
-    //enemies speed with no variable ??
-    //boss movement
-    //review enemies shoot
-    //use boss as enemies ?
-    //test enemies movement with boss in enemies array
     //highscore
-    //enemies movement works on the first game after server launch ?? 
-    //acutally i have no idea whatsoever
+    //review score
     var soundEnable = localStorage.getItem('sound') || 'enable';
     var highscore = localStorage.getItem('highscore') || [];
     var paused = false;
@@ -175,7 +170,7 @@ function init(){
         var boss = new createjs.Bitmap('img/' + levels[level].boss);
         boss.x = 400;
         boss.y = -5;
-        boss.lives = (level + 1) * 5;
+        boss.lives = (level + 1) * 3;
         bossArr.push(boss);
         stage.addChild(boss);
         createjs.Tween.get(boss)
