@@ -23,6 +23,7 @@ function init(){
     //to do
     //add something when enemies hit
     //highscore
+    //something showing current level ?
     var soundEnable = localStorage.getItem('sound') || 'enable';
     var highscore = localStorage.getItem('highscore') || [];
     var paused = false;
@@ -284,7 +285,6 @@ function init(){
         if(bossPhase){
             //check if boss hit ship
             if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], ship, 0)){
-                console.log('boss killed you :(');
                 gameOver(0);
             }
             //check if shoot hit boss
@@ -295,14 +295,12 @@ function init(){
                     stage.update();
                     hitBoss++;
                     bossArr[bossArr.length-1].lives -= fireLevel;
-                    console.log('boss hit ! '+hitBoss);
                     score += (100 * (level + 1)) * fireLevel;
                     if(bossArr[bossArr.length-1].lives <= 0){ 
                         score += 1000;
                         stage.removeChild(bossArr[bossArr.length - 1]);
                         bossArr.splice(bossArr[bossArr.length - 1], 1);
                         stage.update();
-                        console.log('boss is dead');
                         bossPhase = false;
                         canShoot = false;
                         level++;
@@ -319,7 +317,6 @@ function init(){
     }
 
     function moveEnemies(){
-        console.log('move it'); //try without ennemies speed
         for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
             var randX = Math.floor(Math.random() * 960) + 1;
             var randY = Math.floor(Math.random() * 750) + 1;
@@ -327,17 +324,13 @@ function init(){
             .to({y: randY, x:randX}, 2000, createjs.Ease.getPowInOut(1))
             .call(function(){
                 c++;
-                console.log(i+' remove it '+c);
                 if(c == d && !bossPhase) moveEnemies(); //!bossphase ??
             })
             createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", stage);
         }
-        //window.setInterval(function(){if(!bossPhase)moveEnemies();}, enemiesSpeed);
     }
 
     function enemiesShoot(){
-        console.log('ennemies shooting !!!');
         for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
             if( Math.random() > 0){
                 var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemie);
@@ -437,11 +430,11 @@ function init(){
             move.left = true;
         }
         else if( (key == 32 || key == 17) && canShoot && !paused && started){ // space and ctrl
-            if(soundEnable == 'enable'){
-                var sound = createjs.Sound.play('laser');
-                sound.volume = 0.3;
-            }
-            if(canFire){
+            if(canFire && !end){
+                if(soundEnable == 'enable'){
+                    var sound = createjs.Sound.play('laser');
+                    sound.volume = 0.3;
+                }
                 var shoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
                 shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
                 shoot.y = ship.y - (ship.image.height / 2);
