@@ -368,7 +368,7 @@ function init(){
         enemiesShootArr.push(bShoot);
         stage.addChild(bShoot);
         createjs.Tween.get(bShoot)
-        .to({y: 800}, 1000, createjs.Ease.getPowInOut(1))
+        .to({y: 800}, ((800 - bossArr[bossArr.length-1].y) * (5/4)) + 150, createjs.Ease.getPowInOut(1))
         .call(function(){
             if(bossPhase && !end) bossShoot();
         })
