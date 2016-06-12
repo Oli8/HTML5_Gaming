@@ -25,7 +25,8 @@ function init(){
     //highscore
     //something showing current level ?
     var soundEnable = localStorage.getItem('sound') || 'enable';
-    var highscore = localStorage.getItem('highscore') || [];
+    if( localStorage.getItem('highscore') == null) localStorage.setItem('highscore', 0);
+    var highscore = JSON.parse(localStorage.getItem('highscore'));
     var paused = false;
     var started = false;
     var hit = 0;
@@ -139,7 +140,6 @@ function init(){
             .to({y: 150}, 1000, createjs.Ease.getPowInOut(1))
             .call(function(){
                 c++;
-                console.log(+i +' dot call '+c);
                 if( c == levels[level].number){
                     canShoot = true;
                     moveEnemies();
@@ -268,7 +268,6 @@ function init(){
         //check if all enemies died and if so launch boss
         if(ennemiesArray.length == 0 && !bossPhase && !end){
             bossPhase = true;
-            console.log('stage completed');
             addBoss();
         }
         //ship get bonus
@@ -398,18 +397,26 @@ function init(){
         end = true;
         var text, scoreBox, msg, replay;
         msg = win ? 'Congratulations !' : 'Game over';
-        if(win) score += 1000 * livesArray.length;    
+        if(win) score += 1000 * livesArray.length;
+        if( score > highscore ){
+            highscore = score;
+            localStorage.setItem('highscore', highscore);
+        }
         stage.removeAllChildren();
         text = new createjs.Text(msg, '75px RAVIE', 'white');
         text.x = win ? 6 : 225;
-        text.y = 250;
+        text.y = 200;
         scoreBox = new createjs.Text('0'.repeat(5 - String(score).length) + score +' Points', '75px RAVIE', 'white');
         scoreBox.x = 160;
-        scoreBox.y = 360;
+        scoreBox.y = 310;
         replay = new createjs.Text('Replay', '50px RAVIE', 'white');
         replay.x = 370;
-        replay.y = 480;
-        stage.addChild(text, replay, scoreBox);
+        replay.y = 430;
+
+        var hsText = new createjs.Text("HIGHSCORE : " + highscore, '30px RAVIE', 'white');
+        hsText.x = 370;
+        hsText.y = 490;
+        stage.addChild(text, replay, scoreBox, hsText);
         $('#canvas').click(function(){
             if(end)location.reload();
         });
