@@ -56,33 +56,13 @@ function init(){
 
     var fireLevel = 1;
         
-    var ship = new Image();
-    ship.name = 'ship';
-    ship.src = 'img/' + img.ship;
-    ship.onload = loadImage;
-
-    var fire = new Image();
-    fire.src = 'img/' + img.fire[fireLevel];
-    fire.onload = loadImage;
-
-    var smallRock = new Image();
-    smallRock.src = 'img/' + img.rocks.small;
-    smallRock.onload = loadImage;
-
-    var life = new Image();
-    life.src = 'img/' + img.life;
-    life.onload = loadImage;
+    var ship;
 
     createjs.Sound.registerSound("img/Bonus/sfx_laser2.ogg", 'laser');
     createjs.Sound.registerSound("img/Bonus/sfx_lose.ogg", 'lose');
     createjs.Sound.registerSound("img/Bonus/sfx_shieldUp.ogg", 'bonus');
 
-    function loadImage(e){
-        loaded++;
-        if(loaded == toLoad){
-            startScreen();
-        }
-    }
+    startScreen();
 
     function start(){
         started = true;
