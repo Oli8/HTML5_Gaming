@@ -176,7 +176,7 @@ function init(){
         bossArr.push(boss);
         stage.addChild(boss);
         createjs.Tween.get(boss)
-        .to({y: 150}, 500, createjs.Ease.getPowInOut(1))
+        .to({y: 150}, 750, createjs.Ease.getPowInOut(1))
         .call(function(){
             moveBoss();
             bossShoot();
@@ -340,7 +340,7 @@ function init(){
                 enemiesShootArr.push(enemieShoot);
                 stage.addChild(enemieShoot);
                 createjs.Tween.get(enemieShoot)
-                .to({y: 800}, 1000, createjs.Ease.getPowInOut(1))
+                .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 250, createjs.Ease.getPowInOut(1))
                 .call(function(){
                     c++;
                     if(c == d && !bossPhase && !end) enemiesShoot();
@@ -354,7 +354,7 @@ function init(){
         var randX = Math.floor(Math.random() * 960) + 1;
         var randY = Math.floor(Math.random() * 750) + 1;
         createjs.Tween.get(bossArr[bossArr.length-1])
-        .to({y: randY, x:randX}, 2000, createjs.Ease.getPowInOut(1))
+        .to({y: randY, x:randX}, 1500, createjs.Ease.getPowInOut(1))
         .call(function(){
             if(bossPhase) moveBoss();
         })
