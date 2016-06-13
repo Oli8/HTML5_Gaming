@@ -338,7 +338,7 @@ function init(){
         var bShoot = new createjs.Bitmap('img/' +img.fire.enemie);
         bShoot.rotation = 180;
         bShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
-        bShoot.y = bossArr[bossArr.length-1].y;
+        bShoot.y = bossArr[bossArr.length-1].y + 100;
         enemiesShootArr.push(bShoot);
         stage.addChild(bShoot);
         createjs.Tween.get(bShoot)
@@ -350,11 +350,11 @@ function init(){
             dShoot = new createjs.Bitmap('img/' +img.fire.enemie);
             dShoot.rotation = 135;
             dShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
-            dShoot.y = bossArr[bossArr.length-1].y;
+            dShoot.y = bossArr[bossArr.length-1].y + 100;
             eShoot = new createjs.Bitmap('img/' +img.fire.enemie);
             eShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
             eShoot.rotation = -135;
-            eShoot.y = bossArr[bossArr.length-1].y;
+            eShoot.y = bossArr[bossArr.length-1].y + 100;
             stage.addChild(dShoot, eShoot);
             enemiesShootArr.push(dShoot, eShoot);
             createjs.Tween.get(dShoot)
