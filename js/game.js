@@ -176,9 +176,9 @@ function init(){
             for (var j=0; j<shootArray.length; j++) {
                 var collision = ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0);
                 if(collision && canShoot){
-                    ennemiesArray[i].life -= fireLevel;
+                    ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0){
+                        if(Math.random() > 0.75){
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
@@ -193,7 +193,7 @@ function init(){
                         }
                         stage.removeChild(ennemiesArray[i]);
                         ennemiesArray.splice(i, 1);
-                        score += (50 * (level + 1)) * fireLevel; 
+                        score += fireLevel == 4 ? (50 * (level + 1)) * 3 : (50 * (level + 1)) * fireLevel; 
                         scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                     }
                     else{
@@ -269,8 +269,8 @@ function init(){
                     shootArray.splice(i, 1);
                     stage.update();
                     hitBoss++;
-                    bossArr[bossArr.length-1].lives -= fireLevel;
-                    score += (100 * (level + 1)) * fireLevel;
+                    bossArr[bossArr.length-1].lives -= fireLevel == 4 ? 3 : fireLevel;
+                    score += fireLevel == 4 ? (100 * (level + 1)) * 3 : (100 * (level + 1)) * fireLevel;
                     if(bossArr[bossArr.length-1].lives <= 0){ 
                         score += 1000;
                         stage.removeChild(bossArr[bossArr.length - 1]);
@@ -306,7 +306,6 @@ function init(){
 
     function enemiesShoot(){
         for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
-            if( Math.random() > 0){
                 var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemie);
                 enemieShoot.rotation = 180;
                 enemieShoot.x = ennemiesArray[i].x + (ennemiesArray[i].image.width / 2) + 5;
@@ -320,7 +319,6 @@ function init(){
                     if(c == d && !bossPhase && !end) enemiesShoot();
                 }) 
                 createjs.Ticker.setFPS(60);
-            }
         }
     }
 
@@ -338,6 +336,7 @@ function init(){
     function bossShoot(){
         var dShoot, eShoot;
         var bShoot = new createjs.Bitmap('img/' +img.fire.enemie);
+        bShoot.rotation = 180;
         bShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
         bShoot.y = bossArr[bossArr.length-1].y;
         enemiesShootArr.push(bShoot);
@@ -349,10 +348,12 @@ function init(){
         })
         if(level == 4){
             dShoot = new createjs.Bitmap('img/' +img.fire.enemie);
+            dShoot.rotation = 135;
             dShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
             dShoot.y = bossArr[bossArr.length-1].y;
             eShoot = new createjs.Bitmap('img/' +img.fire.enemie);
             eShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
+            eShoot.rotation = -135;
             eShoot.y = bossArr[bossArr.length-1].y;
             stage.addChild(dShoot, eShoot);
             enemiesShootArr.push(dShoot, eShoot);
@@ -443,9 +444,11 @@ function init(){
                 .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
                 if( fireLevel == 4){
                     var aShoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
+                    aShoot.rotation = 45;
                     aShoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
                     aShoot.y = ship.y - (ship.image.height / 2);
                     var zShoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
+                    zShoot.rotation = -45;
                     zShoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
                     zShoot.y = ship.y - (ship.image.height / 2);
                     stage.addChild(aShoot, zShoot);
