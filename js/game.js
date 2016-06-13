@@ -20,10 +20,6 @@ function init(){
         {type: img.enemies[4], number: 5, shootY: 100, boss: img.bosses[4], pos: 150}
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
-    //to do
-    //add something when enemies hit
-    //highscore
-    //something showing current level ?
     var soundEnable = localStorage.getItem('sound') || 'enable';
     if( localStorage.getItem('highscore') == null) localStorage.setItem('highscore', 0);
     var highscore = JSON.parse(localStorage.getItem('highscore'));
@@ -148,6 +144,7 @@ function init(){
     }
 
     function addBoss(){
+        console.log(level);
         bossPhase = true;
         var boss = new createjs.Bitmap('img/' + levels[level].boss);
         boss.x = 400;
@@ -283,7 +280,6 @@ function init(){
                         bossPhase = false;
                         canShoot = false;
                         level++;
-                        //enemiesSpeed -= 1000; //fucks everything up somehow??
                         if(level < levels.length)
                             addEnnemies();
                         else
@@ -303,7 +299,7 @@ function init(){
             .to({y: randY, x:randX}, 2000, createjs.Ease.getPowInOut(1))
             .call(function(){
                 c++;
-                if(c == d && !bossPhase) moveEnemies(); //!bossphase ??
+                if(c == d && !bossPhase) moveEnemies();
             })
             createjs.Ticker.setFPS(60);
         }
@@ -341,6 +337,7 @@ function init(){
     }
 
     function bossShoot(){
+        var dShoot, eShoot;
         var bShoot = new createjs.Bitmap('img/' +img.fire.enemie);
         bShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
         bShoot.y = bossArr[bossArr.length-1].y;
@@ -351,6 +348,21 @@ function init(){
         .call(function(){
             if(bossPhase && !end) bossShoot();
         })
+        if(level == 4){
+            dShoot = new createjs.Bitmap('img/' +img.fire.enemie);
+            dShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
+            dShoot.y = bossArr[bossArr.length-1].y;
+            eShoot = new createjs.Bitmap('img/' +img.fire.enemie);
+            eShoot.x = bossArr[bossArr.length-1].x + (bossArr[bossArr.length-1].image.width / 2) + 5;
+            eShoot.y = bossArr[bossArr.length-1].y;
+            stage.addChild(dShoot, eShoot);
+            enemiesShootArr.push(dShoot, eShoot);
+            createjs.Tween.get(dShoot)
+            .to({y: dShoot.y+960, x: dShoot.x+960}, 2500, createjs.Ease.getPowInOut(1))
+            createjs.Ticker.setFPS(60);
+            createjs.Tween.get(eShoot)
+            .to({y: eShoot.y+960, x: eShoot.x-960}, 2500, createjs.Ease.getPowInOut(1))
+        }
         createjs.Ticker.setFPS(60);
     }
 
