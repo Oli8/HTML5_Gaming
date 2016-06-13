@@ -2,7 +2,7 @@ function init(){
     var stage = new createjs.Stage("canvas");
     var img = {
         ship: 'PNG/playerShip2_red.png',    
-        fire: {1: 'PNG/Lasers/laserBlue07.png', 2: 'PNG/Lasers/laserBlue06.png', 3: 'PNG/Lasers/laserBlue16.png',
+        fire: {1: 'PNG/Lasers/laserBlue07.png', 2: 'PNG/Lasers/laserBlue06.png', 3: 'PNG/Lasers/laserBlue16.png', 4: 'PNG/Lasers/laserBlue16.png', 
                enemie: 'PNG/Lasers/laserRed07.png', hit: {blue: 'PNG/Lasers/LaserBlue10.png', red: 'PNG/Lasers/LaserBlue10.png'}},
         rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', big: 'PNG/Meteors/meteorBrown_big3.png'},
         enemies: {0: 'PNG/Enemies/enemyBlue1.png', 1: 'PNG/Enemies/enemyBlue2.png', 2: 'PNG/Enemies/enemyBlue3.png', 3: 'PNG/Enemies/enemyBlue4.png', 4: 'PNG/Enemies/enemyBlue5.png'},
@@ -144,7 +144,6 @@ function init(){
     }
 
     function addBoss(){
-        console.log(level);
         bossPhase = true;
         var boss = new createjs.Bitmap('img/' + levels[level].boss);
         boss.x = 400;
@@ -179,7 +178,7 @@ function init(){
                 if(collision && canShoot){
                     ennemiesArray[i].life -= fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0.8){
+                        if(Math.random() > 0){
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
@@ -376,7 +375,7 @@ function init(){
             stage.update();
         }
         else if(type == 'shoot'){
-            if(fireLevel < 3)
+            if(fireLevel < 4)
                 fireLevel++;
         }
         else if(type == 'points'){
@@ -442,6 +441,21 @@ function init(){
                 var speed = (ship.y + 1000) * (4/3); 
                 createjs.Tween.get(shoot)
                 .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
+                if( fireLevel == 4){
+                    var aShoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
+                    aShoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
+                    aShoot.y = ship.y - (ship.image.height / 2);
+                    var zShoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
+                    zShoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
+                    zShoot.y = ship.y - (ship.image.height / 2);
+                    stage.addChild(aShoot, zShoot);
+                    shootArray.push(aShoot, zShoot);
+                     createjs.Tween.get(aShoot)
+                    .to({y: aShoot.y-960, x: aShoot.x+960}, 2500, createjs.Ease.getPowInOut(1))
+                    createjs.Ticker.setFPS(60);
+                    createjs.Tween.get(zShoot)
+                    .to({y: zShoot.y-960, x: zShoot.x-960}, 2500, createjs.Ease.getPowInOut(1))
+                }
                 createjs.Ticker.setFPS(60);
                 canFire = false;
                 setTimeout(function(){canFire = true}, 200);
