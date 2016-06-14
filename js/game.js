@@ -47,6 +47,7 @@ function init(){
     var scoreWrap;
     var loaded = 0;
 
+    var invicible = false;
     var fireLevel = 1;
         
     var ship;
@@ -202,7 +203,7 @@ function init(){
         }
         //enemies hit ship
         for(var i=0; i<ennemiesArray.length; i++){
-            if(ndgmr.checkPixelCollision(ennemiesArray[i], ship, 0)){
+            if(ndgmr.checkPixelCollision(ennemiesArray[i], ship, 0) && !invicible){
                 stage.removeChild(ennemiesArray[i]);
                 ennemiesArray.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
@@ -212,13 +213,19 @@ function init(){
                     sound.volume = 1;
                 }
                 stage.update();
+                invicible = true;
+                ship.alpha = 0.5;
+                setTimeout(function(){
+                    invicible = false
+                    ship.alpha = 1;
+                }, 1000);
                 if( livesArray.length == 0)
                     gameOver(0);
             }
         }
         //enemies shoot hit ship
         for(var i=0; i<enemiesShootArr.length; i++){
-            if(ndgmr.checkPixelCollision(enemiesShootArr[i], ship, 0)){
+            if(ndgmr.checkPixelCollision(enemiesShootArr[i], ship, 0) && !invicible){
                 stage.removeChild(enemiesShootArr[i]);
                 enemiesShootArr.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
@@ -228,6 +235,12 @@ function init(){
                     var sound = createjs.Sound.play('lose');
                     sound.volume = 1;
                 }
+                invicible = true;
+                ship.alpha = 0.5;
+                setTimeout(function(){
+                    invicible = false
+                    ship.alpha = 1;
+                }, 1000);
                 if( livesArray.length == 0)
                     gameOver(0);
             }
@@ -250,7 +263,7 @@ function init(){
 
         if(bossPhase){
             //check if boss hit ship
-            if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], ship, 0))
+            if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], ship, 0) && !invicible)
                 gameOver(0);
             //check if shoot hit boss
             for(var i=0; i<shootArray.length; i++){
