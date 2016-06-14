@@ -25,8 +25,6 @@ function init(){
     var highscore = JSON.parse(localStorage.getItem('highscore'));
     var paused = false;
     var started = false;
-    var hit = 0;
-    var hitBoss = 0;
     var canShoot = false;
     var canFire = true;
     var bossArr = [];
@@ -172,12 +170,11 @@ function init(){
             ship.x -= 10
         //shoot hit enemies
         for(var i=0; i<ennemiesArray.length; i++){
-            for (var j=0; j<shootArray.length; j++){
-                var collision = ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0);
-                if(collision && canShoot){
+            for(var j=0; j<shootArray.length; j++){
+                if(ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0) && canShoot){
                     ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0.75){
+                        if(Math.random() > 0){
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
@@ -200,14 +197,12 @@ function init(){
                     stage.removeChild(shootArray[j]);
                     shootArray.splice(j, 1);
                     stage.update();
-                    hit++;
                 }
             }
         }
         //enemies hit ship
         for(var i=0; i<ennemiesArray.length; i++){
-            var coll = ndgmr.checkPixelCollision(ennemiesArray[i], ship, 0);
-            if(coll){
+            if(ndgmr.checkPixelCollision(ennemiesArray[i], ship, 0)){
                 stage.removeChild(ennemiesArray[i]);
                 ennemiesArray.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
@@ -263,7 +258,6 @@ function init(){
                     stage.removeChild(shootArray[i]);
                     shootArray.splice(i, 1);
                     stage.update();
-                    hitBoss++;
                     bossArr[bossArr.length-1].lives -= fireLevel == 4 ? 3 : fireLevel;
                     score += fireLevel == 4 ? (100 * (level + 1)) * 3 : (100 * (level + 1)) * fireLevel;
                     if(bossArr[bossArr.length-1].lives <= 0){ 
@@ -463,7 +457,7 @@ function init(){
                 var restart = new createjs.Text('RESTART', '40px RAVIE', 'white');
                 restart.x = 380;
                 restart.y = 400;
-                $('#canvas').click(function(){location.reload();});;
+                $('#canvas').click(function(){location.reload();});
                 pauseWrap.addChild(pauseText, restart);
                 stage.addChild(pauseWrap);
                 stage.alpha = 0.5;
