@@ -48,7 +48,6 @@ function init(){
     var score = 0;
     var scoreWrap;
     var loaded = 0;
-    var toLoad = 4;
 
     var fireLevel = 1;
         
@@ -172,8 +171,8 @@ function init(){
         if(move.left == true && ship.x > 0)
             ship.x -= 10
         //shoot hit enemies
-        for(var i=0; i<ennemiesArray.length; i++) {
-            for (var j=0; j<shootArray.length; j++) {
+        for(var i=0; i<ennemiesArray.length; i++){
+            for (var j=0; j<shootArray.length; j++){
                 var collision = ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0);
                 if(collision && canShoot){
                     ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
@@ -196,9 +195,8 @@ function init(){
                         score += fireLevel == 4 ? (50 * (level + 1)) * 3 : (50 * (level + 1)) * fireLevel; 
                         scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                     }
-                    else{
+                    else
                         ennemiesArray[i].alpha = ennemiesArray[i].life / (level + 1); 
-                    }
                     stage.removeChild(shootArray[j]);
                     shootArray.splice(j, 1);
                     stage.update();
@@ -219,9 +217,8 @@ function init(){
                     sound.volume = 1;
                 }
                 stage.update();
-                if( livesArray.length == 0){
+                if( livesArray.length == 0)
                     gameOver(0);
-                }
             }
         }
         //enemies shoot hit ship
@@ -236,9 +233,8 @@ function init(){
                     var sound = createjs.Sound.play('lose');
                     sound.volume = 1;
                 }
-                if( livesArray.length == 0){
+                if( livesArray.length == 0)
                     gameOver(0);
-                }
             }
         }
         //check if all enemies died and if so launch boss
@@ -259,9 +255,8 @@ function init(){
 
         if(bossPhase){
             //check if boss hit ship
-            if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], ship, 0)){
+            if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], ship, 0))
                 gameOver(0);
-            }
             //check if shoot hit boss
             for(var i=0; i<shootArray.length; i++){
                 if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], shootArray[i], 0)){
@@ -375,14 +370,12 @@ function init(){
             stage.addChild(life);
             stage.update();
         }
-        else if(type == 'shoot'){
+        else if(type == 'shoot')
             if(fireLevel < 4)
                 fireLevel++;
-        }
-        else if(type == 'points'){
+        else if(type == 'points')
             score += 1000;
             scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
-        }
     }
 
     function gameOver(win){
@@ -416,18 +409,14 @@ function init(){
 
     function handleKeyDown(e){
         var key = e.keyCode;
-        if( key == 38 || key == 90){ //up and Z
+        if( key == 38 || key == 90) //up and Z
             move.up = true;
-        }
-        else if( key == 39 || key == 68){ //right and D             
+        else if( key == 39 || key == 68) //right and D             
             move.right = true;       
-        }
-        else if( key == 40 || key == 83){ // down and S          
+        else if( key == 40 || key == 83) // down and S          
             move.down = true;
-        }
-        else if( key == 37 || key == 81){ // left and Q          
+        else if( key == 37 || key == 81) // left and Q          
             move.left = true;
-        }
         else if( (key == 32 || key == 17) && canShoot && !paused && started){ // space and ctrl
             if(canFire && !end){
                 if(soundEnable == 'enable'){
