@@ -7,7 +7,7 @@ function init(){
         rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', big: 'PNG/Meteors/meteorBrown_big3.png'},
         enemies: {0: 'PNG/Enemies/enemyBlue1.png', 1: 'PNG/Enemies/enemyBlue2.png', 2: 'PNG/Enemies/enemyBlue3.png', 3: 'PNG/Enemies/enemyBlue4.png', 4: 'PNG/Enemies/enemyBlue5.png'},
         bosses: {0: 'PNG/Enemies/enemyBlack5.png', 1: 'PNG/Enemies/enemyBlack4.png', 2: 'PNG/Enemies/enemyBlack3.png', 3: 'PNG/Enemies/enemyBlack2.png', 4: 'PNG/Enemies/enemyBlack1.png'}, 
-        bonus: {life: 'PNG/Power-ups/pill_red.png', shoot: 'PNG/Power-ups/bolt_bronze.png', points: 'PNG/Power-ups/star_bronze.png'},
+        bonus: {life: 'PNG/Power-ups/pill_red.png', shoot: 'PNG/Power-ups/bolt_bronze.png', points: 'PNG/Power-ups/star_bronze.png', speed: 'PNG/Power-ups/powerupRed_star.png'},
         life: 'PNG/UI/playerLife2_red.png'
     };
     var level = 0;
@@ -49,6 +49,7 @@ function init(){
 
     var invicible = false;
     var fireLevel = 1;
+    var speed = 7.5;
         
     var ship;
 
@@ -163,13 +164,13 @@ function init(){
         //movement
         if(!paused){
             if(move.up && ship.y > 0 )
-                ship.y -= 10
+                ship.y -= speed;
             if(move.right && ship.x < stage.canvas.width - ship.image.width)
-                ship.x += 10
+                ship.x += speed;
             if(move.down && ship.y < stage.canvas.height - ship.image.height)
-                ship.y += 10
+                ship.y += speed;
             if(move.left && ship.x > 0)
-                ship.x -= 10
+                ship.x -= speed;
         }
         //shoot hit enemies
         for(var i=0; i<ennemiesArray.length; i++){
@@ -177,8 +178,8 @@ function init(){
                 if(ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0) && canShoot){
                     ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0.8){
-                            var bonusTypeArr = ['life', 'shoot', 'points'];
+                        if(Math.random() > 0){
+                            var bonusTypeArr = ['life', 'shoot', 'points', 'speed'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
                             bonus.x = ennemiesArray[i].x;
@@ -296,10 +297,8 @@ function init(){
 
     function moveEnemies(){
         for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
-            var randX = Math.floor(Math.random() * 960) + 1;
-            var randY = Math.floor(Math.random() * 750) + 1;
             createjs.Tween.get(ennemiesArray[i])
-            .to({y: randY, x:randX}, 2000, createjs.Ease.getPowInOut(1))
+            .to({y: Math.floor(Math.random() * 750) + 1, x: Math.floor(Math.random() * 960) + 1}, 2000, createjs.Ease.getPowInOut(1))
             .call(function(){
                 c++;
                 if(c == d && !bossPhase) moveEnemies();
@@ -327,10 +326,8 @@ function init(){
     }
 
     function moveBoss(){
-        var randX = Math.floor(Math.random() * 960) + 1;
-        var randY = Math.floor(Math.random() * 750) + 1;
         createjs.Tween.get(bossArr[bossArr.length-1])
-        .to({y: randY, x:randX}, 1500, createjs.Ease.getPowInOut(1))
+        .to({y: Math.floor(Math.random() * 750) + 1, x: Math.floor(Math.random() * 960) + 1}, 1500, createjs.Ease.getPowInOut(1))
         .call(function(){
             if(bossPhase) moveBoss();
         })
@@ -379,12 +376,18 @@ function init(){
             stage.addChild(life);
             stage.update();
         }
-        else if(type == 'shoot')
+        else if(type == 'shoot'){
             if(fireLevel < 4)
                 fireLevel++;
-        else if(type == 'points')
+        }
+        else if(type == 'points'){
+            console.log('points bonus');
             score += 1000;
             scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
+        }
+        else if(type == 'speed' && speed < 20){
+            speed *= 1.25;
+        }
     }
 
     function gameOver(win){
@@ -406,7 +409,6 @@ function init(){
         replay = new createjs.Text('Replay', '50px RAVIE', 'white');
         replay.x = 370;
         replay.y = 430;
-
         var hsText = new createjs.Text("HIGHSCORE : " + highscore, '30px RAVIE', 'white');
         hsText.x = 370;
         hsText.y = 490;
@@ -436,10 +438,9 @@ function init(){
                 shoot.x = ship.x + (ship.image.width / 2) - (shoot.image.width / 2);
                 shoot.y = ship.y - (ship.image.height / 2);
                 shootArray.push(shoot);
-                stage.addChild(shoot);
-                var speed = (ship.y + 1000) * (4/3); 
+                stage.addChild(shoot); 
                 createjs.Tween.get(shoot)
-                .to({y: - 1000}, speed, createjs.Ease.getPowInOut(1))
+                .to({y: - 1000}, (ship.y + 1000) * (4/3), createjs.Ease.getPowInOut(1))
                 if( fireLevel == 4){
                     var aShoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
                     aShoot.rotation = 45;
