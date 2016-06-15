@@ -80,7 +80,7 @@ function init(){
         soundText.x = 390;
         soundText.y = 500;
         $(document).keydown(function(e){
-            if(e.keyCode == 13 && !end) start()
+            if(e.keyCode == 13 && !end && !paused) start();
         })
         startWrap.addChild(helpText, startText, soundText);
         stage.addChild(startWrap);
@@ -159,23 +159,25 @@ function init(){
         createjs.Ticker.addEventListener("tick", stage);
     }
 
-    function tick(event){
+    function tick(){
         //movement
-        if(move.up == true && ship.y > 0 )
-            ship.y -= 10
-        if(move.right == true && ship.x < stage.canvas.width - ship.image.width)
-            ship.x += 10
-        if(move.down == true && ship.y < stage.canvas.height - ship.image.height)
-            ship.y += 10
-        if(move.left == true && ship.x > 0)
-            ship.x -= 10
+        if(!paused){
+            if(move.up && ship.y > 0 )
+                ship.y -= 10
+            if(move.right && ship.x < stage.canvas.width - ship.image.width)
+                ship.x += 10
+            if(move.down && ship.y < stage.canvas.height - ship.image.height)
+                ship.y += 10
+            if(move.left && ship.x > 0)
+                ship.x -= 10
+        }
         //shoot hit enemies
         for(var i=0; i<ennemiesArray.length; i++){
             for(var j=0; j<shootArray.length; j++){
                 if(ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0) && canShoot){
                     ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0){
+                        if(Math.random() > 0.8){
                             var bonusTypeArr = ['life', 'shoot', 'points'];
                             var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
