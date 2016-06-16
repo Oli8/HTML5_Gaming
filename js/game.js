@@ -42,7 +42,7 @@ function init(){
     var ennemiesArray = [];
     var livesArray = [];
     
-    var enemiesSpeed = 5000;//why not    
+    var enemiesSpeed = 5000;    
     var score = 0;
     var scoreWrap;
     var loaded = 0;
