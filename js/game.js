@@ -26,7 +26,7 @@ function init(){
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     var soundEnable = localStorage.getItem('sound') || 'enable';
-    if( localStorage.getItem('highscore') == null) localStorage.setItem('highscore', 0);
+    if( localStorage.getItem('highscore') === null) localStorage.setItem('highscore', 0);
     var highscore = JSON.parse(localStorage.getItem('highscore'));
     var paused = false;
     var started = false;
@@ -86,7 +86,7 @@ function init(){
         soundText.y = 500;
         $(document).keydown(function(e){
             if(e.keyCode == 13 && !end && !paused) start();
-        })
+        });
         startWrap.addChild(helpText, startText, soundText);
         stage.addChild(startWrap);
         $('#canvas').click(function(){
@@ -124,7 +124,7 @@ function init(){
                     moveEnemies();
                     enemiesShoot();
                 }
-            })
+            });
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", stage);
         }
@@ -159,7 +159,7 @@ function init(){
         .call(function(){
             moveBoss();
             bossShoot();
-        })
+        });
         createjs.Ticker.setFPS(60);
         createjs.Ticker.addEventListener("tick", stage);
     }
@@ -192,7 +192,7 @@ function init(){
                             bonusArr.push(bonus);
                             stage.addChild(bonus);
                             createjs.Tween.get(bonus)
-                            .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 2000, createjs.Ease.getPowInOut(1))
+                            .to({y: 800}, ((800 - ennemiesArray[i].y) * (5/4)) + 2000, createjs.Ease.getPowInOut(1));
                             createjs.Ticker.setFPS(60);
                         }
                         stage.removeChild(ennemiesArray[i]);
@@ -223,10 +223,10 @@ function init(){
                 invicible = true;
                 ship.alpha = 0.5;
                 setTimeout(function(){
-                    invicible = false
+                    invicible = false;
                     ship.alpha = 1;
                 }, 1000);
-                if( livesArray.length == 0)
+                if( livesArray.length === 0)
                     gameOver(0);
             }
         }
@@ -245,15 +245,15 @@ function init(){
                 invicible = true;
                 ship.alpha = 0.5;
                 setTimeout(function(){
-                    invicible = false
+                    invicible = false;
                     ship.alpha = 1;
                 }, 1000);
-                if( livesArray.length == 0)
+                if( livesArray.length === 0)
                     gameOver(0);
             }
         }
         //check if all enemies died and if so launch boss
-        if(ennemiesArray.length == 0 && !bossPhase && !end){
+        if(ennemiesArray.length === 0 && !bossPhase && !end){
             bossPhase = true;
             addBoss();
         }
@@ -306,7 +306,7 @@ function init(){
             .call(function(){
                 c++;
                 if(c == d && !bossPhase) moveEnemies();
-            })
+            });
             createjs.Ticker.setFPS(60);
         }
     }
@@ -324,7 +324,7 @@ function init(){
                 .call(function(){
                     c++;
                     if(c == d && !bossPhase && !end) enemiesShoot();
-                }) 
+                });
                 createjs.Ticker.setFPS(60);
         }
     }
@@ -334,7 +334,7 @@ function init(){
         .to({y: Math.floor(Math.random() * 750) + 1, x: Math.floor(Math.random() * 960) + 1}, 1500, createjs.Ease.getPowInOut(1))
         .call(function(){
             if(bossPhase) moveBoss();
-        })
+        });
         createjs.Ticker.setFPS(60);
     }
 
@@ -350,7 +350,7 @@ function init(){
         .to({y: 800}, ((800 - bossArr[bossArr.length-1].y) * (5/4)) + 150, createjs.Ease.getPowInOut(1))
         .call(function(){
             if(bossPhase && !end) bossShoot();
-        })
+        });
         if(level == 4){
             dShoot = new createjs.Bitmap('img/' +img.fire.enemie);
             dShoot.rotation = 135;
@@ -363,10 +363,10 @@ function init(){
             stage.addChild(dShoot, eShoot);
             enemiesShootArr.push(dShoot, eShoot);
             createjs.Tween.get(dShoot)
-            .to({y: dShoot.y+960, x: dShoot.x+960}, 2500, createjs.Ease.getPowInOut(1))
+            .to({y: dShoot.y+960, x: dShoot.x+960}, 2500, createjs.Ease.getPowInOut(1));
             createjs.Ticker.setFPS(60);
             createjs.Tween.get(eShoot)
-            .to({y: eShoot.y+960, x: eShoot.x-960}, 2500, createjs.Ease.getPowInOut(1))
+            .to({y: eShoot.y+960, x: eShoot.x-960}, 2500, createjs.Ease.getPowInOut(1));
         }
         createjs.Ticker.setFPS(60);
     }
@@ -444,7 +444,7 @@ function init(){
                 shootArray.push(shoot);
                 stage.addChild(shoot); 
                 createjs.Tween.get(shoot)
-                .to({y: - 1000}, (ship.y + 1000) * (4/3), createjs.Ease.getPowInOut(1))
+                .to({y: - 1000}, (ship.y + 1000) * (4/3), createjs.Ease.getPowInOut(1));
                 if( fireLevel == 4){
                     var aShoot = new createjs.Bitmap('img/' +img.fire[fireLevel]);
                     aShoot.rotation = 45;
@@ -457,14 +457,14 @@ function init(){
                     stage.addChild(aShoot, zShoot);
                     shootArray.push(aShoot, zShoot);
                      createjs.Tween.get(aShoot)
-                    .to({y: aShoot.y-960, x: aShoot.x+960}, 2500, createjs.Ease.getPowInOut(1))
+                    .to({y: aShoot.y-960, x: aShoot.x+960}, 2500, createjs.Ease.getPowInOut(1));
                     createjs.Ticker.setFPS(60);
                     createjs.Tween.get(zShoot)
-                    .to({y: zShoot.y-960, x: zShoot.x-960}, 2500, createjs.Ease.getPowInOut(1))
+                    .to({y: zShoot.y-960, x: zShoot.x-960}, 2500, createjs.Ease.getPowInOut(1));
                 }
                 createjs.Ticker.setFPS(60);
                 canFire = false;
-                setTimeout(function(){canFire = true}, 200);
+                setTimeout(function(){canFire = true;}, 200);
             }
         }
         else if( key == 80 || key == 27){ // P and escape
