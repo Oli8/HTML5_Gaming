@@ -15,13 +15,14 @@ function init(){
     //text showing current level
     //infinite levels
     //some classes 
+    //shoot
     var levels = [
         //{type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
-        new Level(img.enemies[0], 2, 100, img.bosses[0], 300),
-        {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200},
-        {type: img.enemies[2], number: 4, shootY: 100, boss: img.bosses[2], pos: 175},
-        {type: img.enemies[3], number: 5, shootY: 100, boss: img.bosses[3], pos: 150},
-        {type: img.enemies[4], number: 5, shootY: 100, boss: img.bosses[4], pos: 150}
+        new Level(img.enemies[0], 2, img.bosses[0], 300),
+        {type: img.enemies[1], number: 3, boss: img.bosses[1], pos: 200},
+        {type: img.enemies[2], number: 4, boss: img.bosses[2], pos: 175},
+        {type: img.enemies[3], number: 5, boss: img.bosses[3], pos: 150},
+        {type: img.enemies[4], number: 5, boss: img.bosses[4], pos: 150}
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     var soundEnable = localStorage.getItem('sound') || 'enable';
@@ -49,7 +50,6 @@ function init(){
     var enemiesSpeed = 5000;    
     var score = 0;
     var scoreWrap;
-    var loaded = 0;
 
     var invicible = false;
     var fireLevel = 1;
@@ -316,7 +316,7 @@ function init(){
                 var enemieShoot = new createjs.Bitmap('img/' +img.fire.enemie);
                 enemieShoot.rotation = 180;
                 enemieShoot.x = ennemiesArray[i].x + (ennemiesArray[i].image.width / 2) + 5;
-                enemieShoot.y = ennemiesArray[i].y + levels[level].shootY;
+                enemieShoot.y = ennemiesArray[i].y + 100;
                 enemiesShootArr.push(enemieShoot);
                 stage.addChild(enemieShoot);
                 createjs.Tween.get(enemieShoot)
