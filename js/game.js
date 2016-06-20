@@ -3,7 +3,7 @@ function init(){
     var img = {
         ship: 'PNG/playerShip2_red.png',    
         fire: {1: 'PNG/Lasers/laserBlue07.png', 2: 'PNG/Lasers/laserBlue06.png', 3: 'PNG/Lasers/laserBlue16.png', 4: 'PNG/Lasers/laserBlue16.png', 
-               enemie: 'PNG/Lasers/laserRed07.png', hit: {blue: 'PNG/Lasers/LaserBlue10.png', red: 'PNG/Lasers/LaserBlue10.png'}},
+               enemie: 'PNG/Lasers/laserRed07.png', hit: {blue: 'PNG/Lasers/laserBlue10.png', red: 'PNG/Lasers/laserBlue10.png'}},
         rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', big: 'PNG/Meteors/meteorBrown_big3.png'},
         enemies: {0: 'PNG/Enemies/enemyBlue1.png', 1: 'PNG/Enemies/enemyBlue2.png', 2: 'PNG/Enemies/enemyBlue3.png', 3: 'PNG/Enemies/enemyBlue4.png', 4: 'PNG/Enemies/enemyBlue5.png'},
         bosses: {0: 'PNG/Enemies/enemyBlack5.png', 1: 'PNG/Enemies/enemyBlack4.png', 2: 'PNG/Enemies/enemyBlack3.png', 3: 'PNG/Enemies/enemyBlack2.png', 4: 'PNG/Enemies/enemyBlack1.png'}, 
@@ -17,12 +17,13 @@ function init(){
     //boss lives indicator
     //shoot anim
     //describe game levels
+    //random rocks at some point
     var levels = [
         new Level(img.enemies[0], 2, img.bosses[0], 300),
-        new Level(img.enemies[1], 3, img.bosses[1], 200),
-        new Level(img.enemies[2], 4, img.bosses[2], 175),
-        new Level(img.enemies[3], 5, img.bosses[3], 150),
-        new Level(img.enemies[4], 5, img.bosses[4], 150)
+        // new Level(img.enemies[1], 3, img.bosses[1], 200),
+        // new Level(img.enemies[2], 4, img.bosses[2], 175),
+        // new Level(img.enemies[3], 5, img.bosses[3], 150),
+        // new Level(img.enemies[4], 5, img.bosses[4], 150)
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     var soundEnable = localStorage.getItem('sound') || 'enable';
@@ -297,10 +298,11 @@ function init(){
                         canShoot = false;
                         level++;
                         levelText.text = 'Level ' + (level + 1);
-                        if(level < levels.length)
-                            addEnnemies();
-                        else
-                            gameOver(1);
+                        if(level == levels.length){
+                            console.log('generate new level');
+                            levels.push(new Level(img.enemies[4], 5, img.bosses[4], 150));
+                        }    
+                        addEnnemies(); 
                     }
                     scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                 }
