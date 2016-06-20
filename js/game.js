@@ -11,20 +11,18 @@ function init(){
         life: 'PNG/UI/playerLife2_red.png'
     };
     var level = 0;
-    //describe game levels
-    //text showing current level
     //infinite levels
     //some classes 
     //shoot
     //boss lives indicator
     //shoot anim
+    //describe game levels
     var levels = [
-        //{type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
         new Level(img.enemies[0], 2, img.bosses[0], 300),
-        {type: img.enemies[1], number: 3, boss: img.bosses[1], pos: 200},
-        {type: img.enemies[2], number: 4, boss: img.bosses[2], pos: 175},
-        {type: img.enemies[3], number: 5, boss: img.bosses[3], pos: 150},
-        {type: img.enemies[4], number: 5, boss: img.bosses[4], pos: 150}
+        new Level(img.enemies[1], 3, img.bosses[1], 200),
+        new Level(img.enemies[2], 4, img.bosses[2], 175),
+        new Level(img.enemies[3], 5, img.bosses[3], 150),
+        new Level(img.enemies[4], 5, img.bosses[4], 150)
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     var soundEnable = localStorage.getItem('sound') || 'enable';
@@ -396,7 +394,6 @@ function init(){
                 fireLevel++;
         }
         else if(type == 'points'){
-            console.log('points bonus');
             score += 1000;
             scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
         }
