@@ -16,6 +16,8 @@ function init(){
     //infinite levels
     //some classes 
     //shoot
+    //boss lives indicator
+    //shoot anim
     var levels = [
         //{type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
         new Level(img.enemies[0], 2, img.bosses[0], 300),
@@ -39,6 +41,7 @@ function init(){
     var startWrap = new createjs.Container();
     var end = false;
     var move = {up: false, right: false, down: false, left: false};
+    var levelText;
     document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
     
@@ -70,6 +73,7 @@ function init(){
         addEnnemies();
         addLives();
         addScore();
+        addLevelText();
         createjs.Ticker.on("tick", tick);
     }
 
@@ -138,6 +142,12 @@ function init(){
             livesArray.push(life);
             stage.addChild(life);
         }
+    }
+
+    function addLevelText(){
+        levelText = new createjs.Text('Level ' + (level + 1), '40px RAVIE', 'white');
+        levelText.x = 20;
+        stage.addChild(levelText);
     }
 
     function addScore(){
@@ -288,6 +298,7 @@ function init(){
                         bossPhase = false;
                         canShoot = false;
                         level++;
+                        levelText.text = 'Level ' + (level + 1);
                         if(level < levels.length)
                             addEnnemies();
                         else
