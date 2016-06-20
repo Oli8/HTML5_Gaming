@@ -12,8 +12,12 @@ function init(){
     };
     var level = 0;
     //describe game levels
+    //text showing current level
+    //infinite levels
+    //some classes 
     var levels = [
-        {type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
+        //{type: img.enemies[0], number: 2, shootY: 100, boss: img.bosses[0], pos: 300},
+        new Level(img.enemies[0], 2, 100, img.bosses[0], 300),
         {type: img.enemies[1], number: 3, shootY: 100, boss: img.bosses[1], pos: 200},
         {type: img.enemies[2], number: 4, shootY: 100, boss: img.bosses[2], pos: 175},
         {type: img.enemies[3], number: 5, shootY: 100, boss: img.bosses[3], pos: 150},
@@ -146,12 +150,12 @@ function init(){
         bossPhase = true;
         var boss = new createjs.Bitmap('img/' + levels[level].boss);
         boss.x = 400;
-        boss.y = -5;
+        boss.y = -100;
         boss.lives = (level + 1) * 3;
         bossArr.push(boss);
         stage.addChild(boss);
         createjs.Tween.get(boss)
-        .to({y: 150}, 750, createjs.Ease.getPowInOut(1))
+        .to({y: 150}, 1000, createjs.Ease.getPowInOut(1))
         .call(function(){
             moveBoss();
             bossShoot();
@@ -178,9 +182,9 @@ function init(){
                 if(ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0) && canShoot){
                     ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0){
+                        if(Math.random() > 0.8){
                             var bonusTypeArr = ['life', 'shoot', 'points', 'speed'];
-                            var bonusType = bonusTypeArr[Math.floor(Math.random()*bonusTypeArr.length)];
+                            var bonusType = bonusTypeArr.random();
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
                             bonus.x = ennemiesArray[i].x;
                             bonus.y = ennemiesArray[i].y;

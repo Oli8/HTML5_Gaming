@@ -11,7 +11,7 @@
 <body onload="init()">
     <canvas id="canvas" width="960" height="750"></canvas>
 
-
+<script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/game.js"></script>
 </body>
 </html>
