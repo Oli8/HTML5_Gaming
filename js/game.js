@@ -7,7 +7,8 @@ function init(){
         rocks: {small: 'PNG/Meteors/meteorBrown_med1.png', big: 'PNG/Meteors/meteorBrown_big3.png'},
         enemies: {0: 'PNG/Enemies/enemyBlue1.png', 1: 'PNG/Enemies/enemyBlue2.png', 2: 'PNG/Enemies/enemyBlue3.png', 3: 'PNG/Enemies/enemyBlue4.png', 4: 'PNG/Enemies/enemyBlue5.png'},
         bosses: {0: 'PNG/Enemies/enemyBlack5.png', 1: 'PNG/Enemies/enemyBlack4.png', 2: 'PNG/Enemies/enemyBlack3.png', 3: 'PNG/Enemies/enemyBlack2.png', 4: 'PNG/Enemies/enemyBlack1.png'}, 
-        bonus: {life: 'PNG/Power-ups/pill_red.png', shoot: 'PNG/Power-ups/bolt_bronze.png', points: 'PNG/Power-ups/star_bronze.png', speed: 'PNG/Power-ups/powerupRed_star.png'},
+        bonus: {life: 'PNG/Power-ups/pill_red.png', shoot: 'PNG/Power-ups/bolt_bronze.png', points: 'PNG/Power-ups/star_bronze.png', 
+        speed: 'PNG/Power-ups/powerupRed_star.png', shield: 'PNG/Power-ups/shield_bronze.png'},
         life: 'PNG/UI/playerLife2_red.png'
     };
     var level = 0;
@@ -18,12 +19,14 @@ function init(){
     //shoot anim
     //describe game levels
     //random rocks at some point
+    //shield bonus
+    //improve loop performance
     var levels = [
         new Level(img.enemies[0], 2, img.bosses[0], 300),
-        // new Level(img.enemies[1], 3, img.bosses[1], 200),
-        // new Level(img.enemies[2], 4, img.bosses[2], 175),
-        // new Level(img.enemies[3], 5, img.bosses[3], 150),
-        // new Level(img.enemies[4], 5, img.bosses[4], 150)
+        new Level(img.enemies[1], 3, img.bosses[1], 200),
+        new Level(img.enemies[2], 4, img.bosses[2], 175),
+        new Level(img.enemies[3], 5, img.bosses[3], 150),
+        new Level(img.enemies[4], 5, img.bosses[4], 150)
     ];
     var helpText = "The game consists of five phase, at the end of each\nyou will have to face the boss, you can not let it touch you\nor the game will end.\nUse the arrow key to move,\nthe spacebar to shoot\nand escape to pause.\nHave fun ! :)"; 
     var soundEnable = localStorage.getItem('sound') || 'enable';
@@ -111,11 +114,12 @@ function init(){
     }
 
     function addEnnemies(){
+        console.log(enemiesSpeed);
         for(var i=0, c=0; i<levels[level].number; i++){
             var ennemie = new createjs.Bitmap('img/' + levels[level].type);
             ennemie.x = levels[level].pos + (i * levels[level].pos);
             ennemie.y = -100;
-            ennemie.life = level+1;
+            ennemie.life = 1; //level+1;
             ennemiesArray.push(ennemie);
             stage.addChild(ennemie);
             createjs.Tween.get(ennemie)
@@ -160,7 +164,7 @@ function init(){
         var boss = new createjs.Bitmap('img/' + levels[level].boss);
         boss.x = 400;
         boss.y = -100;
-        boss.lives = (level + 1) * 3;
+        boss.lives = 1; //(level + 1) * 3;
         bossArr.push(boss);
         stage.addChild(boss);
         createjs.Tween.get(boss)
@@ -298,6 +302,7 @@ function init(){
                         canShoot = false;
                         level++;
                         levelText.text = 'Level ' + (level + 1);
+                        enemiesSpeed *= 0.75; //speed increasement of 25% at the end of each level
                         if(level == levels.length){
                             console.log('generate new level');
                             levels.push(new Level(img.enemies[4], 5, img.bosses[4], 150));
@@ -313,7 +318,7 @@ function init(){
     function moveEnemies(){
         for(var i=0, c=0, d=ennemiesArray.length; i<ennemiesArray.length; i++){
             createjs.Tween.get(ennemiesArray[i])
-            .to({y: Math.floor(Math.random() * 750) + 1, x: Math.floor(Math.random() * 960) + 1}, 2000, createjs.Ease.getPowInOut(1))
+            .to({y: Math.floor(Math.random() * 750) + 1, x: Math.floor(Math.random() * 960) + 1}, enemiesSpeed, createjs.Ease.getPowInOut(1))
             .call(function(){
                 c++;
                 if(c == d && !bossPhase) moveEnemies();
