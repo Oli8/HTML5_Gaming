@@ -420,7 +420,7 @@ function init(){
         replay.x = 370;
         replay.y = 430;
         var hsText = new createjs.Text("HIGHSCORE : " + highscore, '30px RAVIE', 'white');
-        hsText.x = 370;
+        hsText.x = 330;
         hsText.y = 490;
         stage.addChild(text, replay, scoreBox, hsText);
         $('#canvas').click(function(){
