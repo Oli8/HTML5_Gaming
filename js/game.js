@@ -12,15 +12,6 @@ function init(){
         life: 'PNG/UI/playerLife2_red.png'
     };
     var level = 0;
-    //infinite levels
-    //some classes 
-    //shoot
-    //boss lives indicator
-    //shoot anim
-    //describe game levels
-    //random rocks at some point
-    //shield bonus
-    //improve loop performance
     var levels = [
         new Level(img.enemies[0], 2, img.bosses[0], 300),
         new Level(img.enemies[1], 3, img.bosses[1], 200),
