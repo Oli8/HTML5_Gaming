@@ -9,7 +9,8 @@ function init(){
         bosses: {0: 'PNG/Enemies/enemyBlack5.png', 1: 'PNG/Enemies/enemyBlack4.png', 2: 'PNG/Enemies/enemyBlack3.png', 3: 'PNG/Enemies/enemyBlack2.png', 4: 'PNG/Enemies/enemyBlack1.png'}, 
         bonus: {life: 'PNG/Power-ups/pill_red.png', shoot: 'PNG/Power-ups/bolt_bronze.png', points: 'PNG/Power-ups/star_bronze.png', 
         speed: 'PNG/Power-ups/powerupRed_star.png', shield: 'PNG/Power-ups/shield_bronze.png'},
-        life: 'PNG/UI/playerLife2_red.png'
+        life: 'PNG/UI/playerLife2_red.png',
+        shield: 'PNG/Effects/shield3.png'
     };
     var level = 0;
     var levels = [
@@ -50,7 +51,8 @@ function init(){
     var invicible = false;
     var fireLevel = 1;
     var speed = 7.5;
-        
+
+    var shield;
     var ship;
 
     createjs.Sound.registerSound("img/Bonus/sfx_laser2.ogg", 'laser');
@@ -110,7 +112,7 @@ function init(){
             var ennemie = new createjs.Bitmap('img/' + levels[level].type);
             ennemie.x = levels[level].pos + (i * levels[level].pos);
             ennemie.y = -100;
-            ennemie.life = 1; //level+1;
+            ennemie.life = level+1;
             ennemiesArray.push(ennemie);
             stage.addChild(ennemie);
             createjs.Tween.get(ennemie)
@@ -155,7 +157,7 @@ function init(){
         var boss = new createjs.Bitmap('img/' + levels[level].boss);
         boss.x = 400;
         boss.y = -100;
-        boss.lives = 1; //(level + 1) * 3;
+        boss.lives = (level + 1) * 3;
         bossArr.push(boss);
         stage.addChild(boss);
         createjs.Tween.get(boss)
@@ -171,14 +173,22 @@ function init(){
     function tick(){
         //movement
         if(!paused){
-            if(move.up && ship.y > 0 )
+            if(move.up && ship.y > 0 ){
                 ship.y -= speed;
-            if(move.right && ship.x < stage.canvas.width - ship.image.width)
+                if(shield) shield.y -= speed;
+            }
+            if(move.right && ship.x < stage.canvas.width - ship.image.width){
                 ship.x += speed;
-            if(move.down && ship.y < stage.canvas.height - ship.image.height)
+                if(shield) shield.x += speed;
+            }
+            if(move.down && ship.y < stage.canvas.height - ship.image.height){
                 ship.y += speed;
-            if(move.left && ship.x > 0)
+                if(shield) shield.y += speed;
+            }
+            if(move.left && ship.x > 0){
                 ship.x -= speed;
+                if(shield) shield.x -= speed;
+            }
         }
         //shoot hit enemies
         for(var i=0; i<ennemiesArray.length; i++){
@@ -186,8 +196,8 @@ function init(){
                 if(ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0) && canShoot){
                     ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
                     if(ennemiesArray[i].life <= 0){
-                        if(Math.random() > 0.8){
-                            var bonusTypeArr = ['life', 'shoot', 'points', 'speed'];
+                        if(Math.random() > 0.7){
+                            var bonusTypeArr = ['life', 'shoot', 'points', 'speed', 'shield'];
                             var bonusType = bonusTypeArr.random();
                             var bonus = new createjs.Bitmap('img/' + img.bonus[bonusType]);
                             bonus.x = ennemiesArray[i].x;
@@ -236,7 +246,14 @@ function init(){
         }
         //enemies shoot hit ship
         for(var i=0; i<enemiesShootArr.length; i++){
-            if(ndgmr.checkPixelCollision(enemiesShootArr[i], ship, 0) && !invicible){
+            if(shield){
+                if(ndgmr.checkPixelCollision(enemiesShootArr[i], shield, 0)){
+                    stage.removeChild(enemiesShootArr[i]);
+                    enemiesShootArr.splice(i, 1);
+                    stage.update();
+                }
+            }
+            else if(ndgmr.checkPixelCollision(enemiesShootArr[i], ship, 0) && !invicible){
                 stage.removeChild(enemiesShootArr[i]);
                 enemiesShootArr.splice(i, 1);
                 stage.removeChild(livesArray[livesArray.length-1]);
@@ -294,11 +311,10 @@ function init(){
                         level++;
                         levelText.text = 'Level ' + (level + 1);
                         enemiesSpeed *= 0.75; //speed increasement of 25% at the end of each level
-                        if(level == levels.length){
-                            console.log('generate new level');
-                            levels.push(new Level(img.enemies[4], 5, img.bosses[4], 150));
-                        }    
-                        addEnnemies(); 
+                        if(level < levels.length)
+                            addEnnemies();
+                        else
+                            gameOver(1);
                     }
                     scoreWrap.text = '0'.repeat(5 - String(score).length) + score;
                 }
@@ -397,6 +413,19 @@ function init(){
         }
         else if(type == 'speed' && speed < 20){
             speed *= 1.25;
+        }
+        else if(type == 'shield'){
+            if(!shield){
+                shield = new createjs.Bitmap('img/' + img.shield);
+                shield.x = ship.x - 17;
+                shield.y = ship.y - 35;
+                stage.addChild(shield);
+                stage.update();
+                setTimeout(function(){
+                    stage.removeChild(shield);
+                    shield = false;
+                }, 4000);
+            }
         }
     }
 
