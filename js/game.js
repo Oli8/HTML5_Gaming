@@ -26,19 +26,19 @@ function init(){
     var highscore = JSON.parse(localStorage.getItem('highscore'));
     var paused = false;
     var started = false;
+    var end = false;
     var canShoot = false;
     var canFire = true;
-    var bossArr = [];
     var bossPhase = false;
-    var bonusArr = [];
     var pauseWrap = new createjs.Container();
     var startWrap = new createjs.Container();
-    var end = false;
     var move = {up: false, right: false, down: false, left: false};
     var levelText;
     document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
     
+    var bonusArr = [];
+    var bossArr = [];
     var shootArray = [];
     var enemiesShootArr = [];
     var ennemiesArray = [];
