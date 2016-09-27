@@ -6,6 +6,10 @@ Array.prototype.random = function(){
 	return this[Math.floor(Math.random() * this.length)];
 }
 
+Array.prototype.include = function(value){
+	return this.indexOf(value) !== -1;
+}
+
 function Level(type, number, boss, pos){
 	this.type   = type;
 	this.number = number;

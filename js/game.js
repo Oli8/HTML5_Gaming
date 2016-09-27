@@ -12,6 +12,14 @@ function init(){
         life: 'PNG/UI/playerLife2_red.png',
         shield: 'PNG/Effects/shield3.png'
     };
+    var keys = {
+        up: [38, 90, 79],
+        right: [39, 68, 77],
+        down: [40, 83, 76],
+        left: [37, 81, 75],
+        shoot: [32, 17],
+        pause: [80, 27]
+    }
     var level = 0;
     var levels = [
         new Level(img.enemies[0], 2, img.bosses[0], 300),
@@ -459,15 +467,15 @@ function init(){
 
     function handleKeyDown(e){
         var key = e.keyCode;
-        if( key == 38 || key == 90) //up and Z
+        if(keys.up.include(key))
             move.up = true;
-        else if( key == 39 || key == 68) //right and D             
+        else if(keys.right.include(key))
             move.right = true;       
-        else if( key == 40 || key == 83) // down and S          
+        else if(keys.down.include(key))
             move.down = true;
-        else if( key == 37 || key == 81) // left and Q          
+        else if(keys.left.include(key))
             move.left = true;
-        else if( (key == 32 || key == 17) && canShoot && !paused && started){ // space and ctrl
+        else if(keys.shoot.include(key) && canShoot && !paused && started){
             if(canFire && !end){
                 if(soundEnable == 'enable'){
                     var sound = createjs.Sound.play('laser');
@@ -502,7 +510,7 @@ function init(){
                 setTimeout(function(){canFire = true;}, 200);
             }
         }
-        else if( key == 80 || key == 27){ // P and escape
+        else if(keys.pause.include(key)){ // P and escape
             if(!paused){
                 $('#canvas').css('animation-iteration-count', '0');
                 createjs.Ticker.setPaused(paused = true);
@@ -528,13 +536,13 @@ function init(){
 
     function handleKeyUp(e){
         var key = e.keyCode;
-        if( key == 38 || key == 90) //up and Z
+        if(keys.up.include(key))
             move.up = false;
-        else if( key == 39 || key == 68) //right and D             
+        else if(keys.right.include(key))
             move.right = false;         
-        else if( key == 40 || key == 83) // down and S         
+        else if(keys.down.include(key))
             move.down = false;
-        else if( key == 37 || key == 81) // left and Q         
+        else if(keys.left.include(key))
             move.left = false;
     }
 
