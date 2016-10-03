@@ -19,7 +19,7 @@ function init(){
         left: [37, 81, 75],
         shoot: [32, 17],
         pause: [80, 27]
-    }
+    };
     var level = 0;
     var levels = [
         new Level(img.enemies[0], 2, img.bosses[0], 300),
