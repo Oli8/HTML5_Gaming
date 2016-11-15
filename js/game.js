@@ -92,7 +92,7 @@ function init(){
         soundText.x = 390;
         soundText.y = 500;
         $(document).keydown(function(e){
-            if(e.keyCode == 13 && !end && !paused) start();
+            if(e.keyCode == 13 && !end && !paused && !started) start();
         });
         startWrap.addChild(helpText, startText, soundText);
         stage.addChild(startWrap);
