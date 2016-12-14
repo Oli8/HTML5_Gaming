@@ -199,8 +199,8 @@ function init(){
             }
         }
         //shoot hit enemies
-        for(var i=0; i<ennemiesArray.length; i++){
-            for(var j=0; j<shootArray.length; j++){
+        for(var i=ennemiesArray.length-1; i>=0; i--){
+            for(var j=shootArray.length-1; j>=0; j--){
                 if(ndgmr.checkPixelCollision(ennemiesArray[i], shootArray[j], 0) && canShoot){
                     ennemiesArray[i].life -= fireLevel == 4 ? 3 : fireLevel;
                     if(ennemiesArray[i].life <= 0){
@@ -231,7 +231,7 @@ function init(){
             }
         }
         //enemies hit ship
-        for(var i=0; i<ennemiesArray.length; i++){
+        for(var i=ennemiesArray.length-1; i>=0; i--){
             if(ndgmr.checkPixelCollision(ennemiesArray[i], ship, 0) && !invicible){
                 stage.removeChild(ennemiesArray[i]);
                 ennemiesArray.splice(i, 1);
@@ -253,7 +253,7 @@ function init(){
             }
         }
         //enemies shoot hit ship
-        for(var i=0; i<enemiesShootArr.length; i++){
+        for(var i=enemiesShootArr.length-1; i>=0; i--){
             if(shield){
                 if(ndgmr.checkPixelCollision(enemiesShootArr[i], shield, 0)){
                     stage.removeChild(enemiesShootArr[i]);
@@ -287,7 +287,7 @@ function init(){
             addBoss();
         }
         //ship get bonus
-        for(var i=0; i<bonusArr.length; i++){
+        for(var i=bonusArr.length-1; i>=0; i--){
             if( ndgmr.checkPixelCollision(bonusArr[i], ship, 0)){
                 if(soundEnable == 'enable') createjs.Sound.play('bonus');
                 doBonus(bonusArr[i].type);
@@ -302,7 +302,7 @@ function init(){
             if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], ship, 0) && !invicible)
                 gameOver(0);
             //check if shoot hit boss
-            for(var i=0; i<shootArray.length; i++){
+            for(var i=shootArray.length-1; i>=0; i--){
                 if( ndgmr.checkPixelCollision(bossArr[bossArr.length - 1], shootArray[i], 0)){
                     stage.removeChild(shootArray[i]);
                     shootArray.splice(i, 1);
@@ -318,7 +318,7 @@ function init(){
                         canShoot = false;
                         level++;
                         levelText.text = 'Level ' + (level + 1);
-                        enemiesSpeed *= 0.75; //speed increasement of 25% at the end of each level
+                        enemiesSpeed *= 1.25; //speed increasement of 25% at the end of each level
                         if(level < levels.length)
                             addEnnemies();
                         else
