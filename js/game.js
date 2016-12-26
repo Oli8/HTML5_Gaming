@@ -115,7 +115,6 @@ function init(){
     }
 
     function addEnnemies(){
-        console.log(enemiesSpeed);
         for(var i=0, c=0; i<levels[level].number; i++){
             var ennemie = new createjs.Bitmap('img/' + levels[level].type);
             ennemie.x = levels[level].pos + (i * levels[level].pos);
@@ -467,8 +466,10 @@ function init(){
 
     function handleKeyDown(e){
         var key = e.keyCode;
-        if(keys.up.include(key))
+        if(keys.up.include(key)){
             move.up = true;
+            $('canvas').css('animation-duration', '1s');
+        }
         else if(keys.right.include(key))
             move.right = true;       
         else if(keys.down.include(key))
@@ -536,8 +537,10 @@ function init(){
 
     function handleKeyUp(e){
         var key = e.keyCode;
-        if(keys.up.include(key))
+        if(keys.up.include(key)){
             move.up = false;
+            $('canvas').css('animation-duration', '1.5s');
+        }
         else if(keys.right.include(key))
             move.right = false;         
         else if(keys.down.include(key))
