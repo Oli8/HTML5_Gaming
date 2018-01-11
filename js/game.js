@@ -63,11 +63,31 @@ function init(){
     var shield;
     var ship;
 
+    var manifest = [];
+
     createjs.Sound.registerSound("img/Bonus/sfx_laser2.ogg", 'laser');
     createjs.Sound.registerSound("img/Bonus/sfx_lose.ogg", 'lose');
     createjs.Sound.registerSound("img/Bonus/sfx_shieldUp.ogg", 'bonus');
 
-    startScreen();
+    _preload();
+
+    function _preload(){
+        load_assets(img);
+        var preload = new createjs.LoadQueue(false);
+        preload.on("complete", startScreen);
+        preload.loadManifest(manifest);
+    }
+
+    function load_assets(images){
+        for(var i in images){
+            if(typeof images[i] === 'string'){
+                manifest.push('img/' + images[i]);
+                console.log('img/' + images[i])
+            } else {
+                load_assets(images[i])
+            }
+        }
+    }
 
     function start(){
         started = true;
